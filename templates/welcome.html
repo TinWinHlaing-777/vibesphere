@@ -1,0 +1,99 @@
+{%extends 'main.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/welcome.css' %}" />
+<style>
+  .left__container {
+    background-image: url('{% static "images/bg.jpg" %}');
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="welcome__container">
+  <div class="main__container">
+    <div class="left__container">
+      <h3 class="blog__header">
+        Leadership and vision are key to navigating the future
+      </h3>
+      <p class="blog__preview">
+        Kamala Harris and Donald Trump, highlighting the contrast in their
+        leadership styles and visions for America. On the left, Vice President
+        Harris symbolizes progressive change and inclusive policies, while on
+        the right, former President Trump represents a traditional and
+        conservative approach &nbsp;&nbsp;
+        <a href="#" class="read__more">Read More</a>
+      </p>
+    </div>
+    <div class="right__container">
+      <!-- <h3 class="right__header">Latest Articles</h3> -->
+      <div class="card__container">
+        <div class="card">
+          <h4 class="card__title">Steve Jobs' Old Interview Goes Viral</h4>
+          <p class="card__text">
+            After a recent Microsoft outage, an old interview of Steve Jobs
+            criticizing the company has resurfaced and gone viral. In the
+            interview, Jobs harshly critiques Microsoft's design sense, claiming
+            they have "absolutely no taste"
+          </p>
+        </div>
+        <hr />
+        <div class="card">
+          <h4 class="card__title">
+            New Antibiotic Makes Bacterial Resistance Nearly Impossible
+          </h4>
+          <p class="card__text">
+            Researchers at the University of Illinois Chicago have developed a
+            revolutionary antibiotic called macrolones. This dual-action
+            antibiotic targets bacteria in two ways, significantly reducing the
+            likelihood of resistance developing
+          </p>
+        </div>
+        <hr />
+        <div class="card">
+          <h4 class="card__title">
+            Scientists Develop Extraordinary Material for Clean Energy
+          </h4>
+          <p class="card__text">
+            Oregon State University researchers have created a new photocatalyst
+            that can efficiently produce hydrogen from sunlight and water,
+            offering a sustainable and cost-effective clean energy alternative
+          </p>
+        </div>
+        <hr />
+        <div class="card">
+          <h4 class="card__title">
+            Gen Z Employee's Creative 'Out of Office' Email
+          </h4>
+          <p class="card__text">
+            Instead of a traditional out-of-office email, Joshua Kessel created
+            a unique video message for anyone trying to reach him while he is on
+            holiday. This innovative approach has caught widespread attention
+            and is being praised for its creativity
+          </p>
+        </div>
+        <hr />
+        <div class="card">
+          <h4 class="card__title">Celebrities at 2024 ESPY Awards</h4>
+          <p class="card__text">
+            Serena Williams and Ciara were among the stars at the 2024 ESPY
+            Awards after-party in West Hollywood. The event, filled with notable
+            appearances, highlighted the blending of sports and entertainment
+            worlds
+          </p>
+        </div>
+        <hr />
+        <div class="card">
+          <h4 class="card__title">Great Salt Lake Emissions</h4>
+          <p class="card__text">
+            New research has identified the Great Salt Lake as a significant
+            source of greenhouse gas emissions. This discovery has important
+            implications for understanding and mitigating environmental impacts
+            in the region
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

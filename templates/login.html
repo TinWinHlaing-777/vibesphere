@@ -1,0 +1,36 @@
+{%extends 'main.html'%}
+{% load static %} 
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock %}
+{% block content %}
+<div class="form__container">
+    <a href="{%url 'welcome'%}">
+        <img src="{% static 'images/Vibe_Sphere.png' %}" alt="logo" class="app__logo">
+    </a>
+    <form method="post" class="reg__form">
+        <h1 class="reg__form__header">Login your account</h1>
+    {% csrf_token %} 
+    {{ form.non_field_errors }}
+    <div>
+        {{ form.email.errors }}
+        {{ form.email }}
+    </div>
+    <div>
+        {{ form.password.errors }}
+        {{ form.password }}
+    </div>
+    <button type="submit" class="submit__btn">Login</button>
+    <p class="append__text">Don't have an account?</p>
+    <a href="{%url 'register'%}" class="append__link">Create New!</a>
+  </form>
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

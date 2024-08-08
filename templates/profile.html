@@ -1,0 +1,41 @@
+{%extends 'main.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+{% block content %}
+<div style="display: flex;">
+        <!-- Profile Image Upload Form on the Left -->
+        <div style="flex: 1;">
+            <h2>Upload Profile Image</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ image_form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
+        <!-- User Information on the Right -->
+        <div style="flex: 2; margin-left: 20px;">
+            <h2>User Information</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>First Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+            <p><strong>Nick Name:</strong> {{ user.nick_name }}</p>
+            <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+            <p><strong>Nationality:</strong> {{ user.nationality }}</p>
+            <p><strong>Country:</strong> {{ user.country }}</p>
+            <p><strong>City:</strong> {{ user.city }}</p>
+            <p><strong>Postal Code:</strong> {{ user.postal_code }}</p>
+            <p><strong>Description:</strong> {{ user.description }}</p>
+            <p><strong>Profile Image:</strong></p>
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="Profile Image" style="max-width: 200px;">
+            {% else %}
+                <p>No profile image uploaded.</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

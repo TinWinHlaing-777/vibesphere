@@ -1,0 +1,31 @@
+.nav__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 12vh;
+    margin: auto;
+}
+
+.logo{
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1E205A;
+}
+
+.nav__list__container {
+    list-style: none;
+    display: flex;
+    gap: 3rem;
+}
+
+.nav__list {
+    margin: 0;
+}
+
+.nav__list__item {
+    text-decoration: none;
+    color: #1E205A;
+    font-weight: 400;
+    font-size: 1rem;
+}

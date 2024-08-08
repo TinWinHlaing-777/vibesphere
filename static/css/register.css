@@ -1,0 +1,72 @@
+.form__container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+}
+
+.app__logo{
+    width: 10rem;
+    height: 10rem;
+}
+
+.reg__form{
+    width: 50%;
+    height: auto;
+    margin: 0 auto ;
+    padding: 3rem;
+    border-radius: 1rem;
+}
+
+.reg__form__header{
+    text-align: center;
+    color: #1E205A;
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.reg__input{
+    width: 100%;
+    padding: 1rem;
+    margin:  .5rem 0;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #1E205A;
+    background-color: transparent;
+} 
+
+.submit__btn{
+    width: 100%;
+    height: 20%;
+    background-color: #000000;
+    color: #ffffff;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: .5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.submit__btn:hover{
+    transition: 0.3s ease all;
+    background-color: #242424;
+}
+
+.append__text,
+.append__link{
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-decoration: none;
+    color: #1E205A;
+    outline: none;
+}
+
+.append__link{
+    font-weight: 700;
+}
+
