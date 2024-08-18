@@ -11,52 +11,10 @@
     </a>
     <form method="post" class="reg__form">
         <h1 class="reg__form__header">Create New Account</h1>
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div>
-        {{ form.first_name.errors }}
-        {{ form.first_name }}
-    </div>
-    <div>
-        {{ form.last_name.errors }}
-        {{ form.last_name }}
-    </div>
-    <div>
-        {{ form.nick_name.errors }}
-        {{ form.nick_name }}
-    </div>
-    <div>
-        {{ form.email.errors }}
-        {{ form.email }}
-    </div>
-    <div>
-        {{ form.phone_number.errors }}
-        {{ form.phone_number }}
-    </div>
-    <div>
-        {{ form.nationality.errors }}
-        {{ form.nationality }}
-    </div>
-    <div>
-        {{ form.country.errors }}
-        {{ form.country }}
-    </div>
-    <div>
-        {{ form.city.errors }}
-        {{ form.city }}
-    </div>
-    <div>
-        {{ form.postal_code.errors }}
-        {{ form.postal_code }}
-    </div>
-    <div>
-        {{ form.password.errors }}
-        {{ form.password }}
-    </div>
-    <div>
-        {{ form.confirm_password.errors }}
-        {{ form.confirm_password }}
-    </div>
+        {% csrf_token %}
+        {% for field in form %}
+            {{ field }}
+        {% endfor %}
     <button type="submit" class="submit__btn">Create Account</button>
     <p class="append__text">Already have an account?</p>
     <a href="{%url 'login'%}" class="append__link">Please login!</a>

@@ -1,0 +1,19 @@
+{%extends 'main.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages.css' %}" />
+{% endblock %}
+{% block content %}
+<div class="page__container">
+    <div class="page__create__btn__container">
+        <a href="{% url 'create_page' %}" class="create__link">
+            <button class="create__btn">Create a Page</button>    
+        </a>
+        <a href="{% url 'create_page' %}" class="create__link">
+            <button class="update__btn">Manage Page</button>    
+        </a>
+    </div>
+</div>
+
+{% endblock %}

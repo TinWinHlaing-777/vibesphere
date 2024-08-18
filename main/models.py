@@ -1,44 +1,168 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
-# User Model
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    nick_name = models.CharField(max_length=50, blank=True, null=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    nationality = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=50,blank=True, null=True)
-    city = models.CharField(max_length=50, blank=True, null=True)
-    postal_code = models.CharField(max_length=20, blank=True, null=True)
-    password = models.CharField(max_length=20)
-    created_date = models.DateTimeField(auto_now_add=True)
-    description = models.TextField(max_length=250, blank=True, null=True)
-    profile_image = models.ImageField(blank=True, null=True, upload_to="profile/")
-    last_login = models.DateTimeField(_('last login'), blank=True, null=True)
-
-    def __str__(self):
-        return self.email
-    
+from django.contrib.auth.models import User
 from django.db import models
 
-class Article(models.Model):
-    title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="articles/", blank=True, null=True)
-    text = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')
+CATEGORY_CHOICES = [
+        ('Local News', 'Local News'),
+        ('International News', 'International News'),
+        ('Politics', 'Politics'),
+        ('Crime', 'Crime'),
+        ('Business', 'Business'),
+        ('Finance', 'Finance'),
+        ('Economy', 'Economy'),
+        ('Entrepreneurship', 'Entrepreneurship'),
+        ('Real Estate', 'Real Estate'),
+        ('Technology', 'Technology'),
+        ('Gadgets', 'Gadgets'),
+        ('Software', 'Software'),
+        ('Startups', 'Startups'),
+        ('Artificial Intelligence', 'Artificial Intelligence'),
+        ('Lifestyle', 'Lifestyle'),
+        ('Travel', 'Travel'),
+        ('Fashion', 'Fashion'),
+        ('Food & Drink', 'Food & Drink'),
+        ('Health & Fitness', 'Health & Fitness'),
+        ('Relationships', 'Relationships'),
+        ('Entertainment', 'Entertainment'),
+        ('Movies', 'Movies'),
+        ('Music', 'Music'),
+        ('Television', 'Television'),
+        ('Celebrity News', 'Celebrity News'),
+        ('Sports', 'Sports'),
+        ('Football/Soccer', 'Football/Soccer'),
+        ('Basketball', 'Basketball'),
+        ('Tennis', 'Tennis'),
+        ('Motorsports', 'Motorsports'),
+        ('Science', 'Science'),
+        ('Space', 'Space'),
+        ('Biology', 'Biology'),
+        ('Physics', 'Physics'),
+        ('Environmental Science', 'Environmental Science'),
+        ('Culture', 'Culture'),
+        ('Art', 'Art'),
+        ('History', 'History'),
+        ('Literature', 'Literature'),
+        ('Philosophy', 'Philosophy'),
+        ('Education', 'Education'),
+        ('Higher Education', 'Higher Education'),
+        ('Online Learning', 'Online Learning'),
+        ('Career Advice', 'Career Advice'),
+        ('Academic Research', 'Academic Research'),
+        ('Opinion', 'Opinion'),
+        ('Editorials', 'Editorials'),
+        ('Op-Eds', 'Op-Eds'),
+        ('Letters to the Editor', 'Letters to the Editor'),
+        ('Automotive', 'Automotive'),
+        ('Car Reviews', 'Car Reviews'),
+        ('Auto Industry News', 'Auto Industry News'),
+        ('Maintenance Tips', 'Maintenance Tips'),
+        ('Motorcycles', 'Motorcycles'),
+        ('Home & Garden', 'Home & Garden'),
+        ('Interior Design', 'Interior Design'),
+        ('Gardening', 'Gardening'),
+        ('DIY Projects', 'DIY Projects'),
+        ('Home Improvement', 'Home Improvement'),
+        ('Personal Finance', 'Personal Finance'),
+        ('Investing', 'Investing'),
+        ('Banking', 'Banking'),
+        ('Insurance', 'Insurance'),
+        ('Mental Health', 'Mental Health'),
+        ('Medical News', 'Medical News'),
+        ('Nutrition', 'Nutrition'),
+        ('Fitness', 'Fitness'),
+        ('Domestic Politics', 'Domestic Politics'),
+        ('International Relations', 'International Relations'),
+        ('Political Analysis', 'Political Analysis'),
+        ('Policy', 'Policy'),
+        ('Innovations', 'Innovations'),
+        ('Scientific Discoveries', 'Scientific Discoveries'),
+        ('Tech Reviews', 'Tech Reviews'),
+        ('Space Exploration', 'Space Exploration'),
+        ('Climate Change', 'Climate Change'),
+        ('Conservation', 'Conservation'),
+        ('Sustainability', 'Sustainability'),
+        ('Wildlife', 'Wildlife'),
+        ('Religious News', 'Religious News'),
+        ('Spiritual Guidance', 'Spiritual Guidance'),
+        ('Faith Discussions', 'Faith Discussions'),
+        ('Theology', 'Theology'),
+        ('Video Games', 'Video Games'),
+        ('Board Games', 'Board Games'),
+        ('Game Reviews', 'Game Reviews'),
+        ('eSports', 'eSports'),
+        ('Pregnancy', 'Pregnancy'),
+        ('Child Development', 'Child Development'),
+        ('Parenting Tips', 'Parenting Tips'),
+        ('Family Activities', 'Family Activities'),
+    ]
+TAG_CHOICES = [
+        ('Technology', 'Technology'),
+        ('Gadgets', 'Gadgets'),
+        ('Software', 'Software'),
+        ('AI', 'AI'),
+        ('Startups', 'Startups'),
+        ('Health', 'Health'),
+        ('Fitness', 'Fitness'),
+        ('Travel', 'Travel'),
+        ('Food', 'Food'),
+        ('Fashion', 'Fashion'),
+        ('Entertainment', 'Entertainment'),
+        ('Movies', 'Movies'),
+        ('Music', 'Music'),
+        ('Sports', 'Sports'),
+        ('Finance', 'Finance'),
+        ('Economy', 'Economy'),
+        ('Business', 'Business'),
+        ('Science', 'Science'),
+        ('Space', 'Space'),
+        ('Physics', 'Physics'),
+        ('Biology', 'Biology'),
+        ('Environment', 'Environment'),
+        ('Art', 'Art'),
+        ('History', 'History'),
+        ('Philosophy', 'Philosophy'),
+        ('Education', 'Education'),
+        ('Career', 'Career'),
+        ('Politics', 'Politics'),
+        ('Opinion', 'Opinion'),
+        ('Automotive', 'Automotive'),
+        ('Home', 'Home'),
+        ('Parenting', 'Parenting'),
+        ('Gaming', 'Gaming'),
+        ('Religion', 'Religion'),
+    ]
+class BlogPage(models.Model):
+    title = models.CharField(primary_key=True, unique=True, max_length=200)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
-    viewer_count = models.PositiveIntegerField(default=0)
+    updated_date = models.DateTimeField(auto_now=True)
+    profile_image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    meta_description = models.TextField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=10, choices=[('draft', 'Pending'), ('published', 'Published')], default='draft')
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
+    
+class Article(models.Model):
+    title = models.CharField(primary_key=True, unique=True, max_length=200)
+    page_name = models.ForeignKey(BlogPage, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    article_image = models.ImageField(upload_to='article_images/', blank=True, null=True)
+    content = models.TextField()
+    published_date = models.DateTimeField(blank=True, null=True)
+    allow_to_comment = models.BooleanField(default=True)
+    view_count = models.IntegerField(default=0)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    tag = models.CharField(max_length=50, choices=TAG_CHOICES)
 
-    @property
-    def author_name(self):
-        return f"{self.author.first_name} {self.author.last_name}"
+    def __str__(self):
+        return self.title
+    
 
-    @property
-    def author_email(self):
-        return self.author.email
+    

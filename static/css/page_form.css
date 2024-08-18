@@ -1,0 +1,17 @@
+.page__form__container {
+    width: 90%;
+    margin: auto;
+    margin-top: 2%;
+}
+
+.page__form__header{
+    color: #1E205A;
+    text-transform: uppercase;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.page__form{
+    width: 70%;
+    height: auto;
+}

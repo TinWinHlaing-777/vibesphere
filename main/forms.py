@@ -1,52 +1,114 @@
 from django import forms
-from django.contrib.auth.hashers import make_password
-from .models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from .models import BlogPage, Article
 
-class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'reg__input', 'placeholder': 'Password'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'reg__input', 'placeholder': 'Confirm Password'}))
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+        widget= forms.EmailInput(attrs={
+            'class': 'reg__input',
+            'placeholder': 'Email address'
+        }),
+        label=False
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'reg__input',
+            'placeholder': 'Enter your new password',
+        }),
+        label=False
+    )
+
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'reg__input',
+            'placeholder': 'Confirm your password',
+        }),
+        label=False
+    )
 
     class Meta:
         model = User
-        fields = [
-            'first_name', 'last_name', 'nick_name', 'email', 'phone_number', 
-            'nationality', 'country', 'city', 'postal_code', 'password'
-        ]
+        fields = ('username', 'email', 'password1', 'password2')
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'Last Name'}),
-            'nick_name': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'Nick Name'}),
-            'email': forms.EmailInput(attrs={'class': 'reg__input', 'placeholder': 'Email Address'}),
-            'phone_number': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'Phone Number'}),
-            'nationality': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'Nationality'}),
-            'country': forms.TextInput(attrs={'class': 'reg__input', 'placeholder':'Country'}),
-            'city': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'City'}),
-            'postal_code': forms.TextInput(attrs={'class': 'reg__input', 'placeholder': 'Postal Code'}),
+            'username': forms.TextInput(attrs={
+                'class': 'reg__input',
+                'placeholder': 'Enter your username',
+            }),
+        }
+        labels = {
+            'username': False,
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match!")
-        
-        return cleaned_data
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget = forms.TextInput(attrs={
+            'class': 'reg__input',
+            'placeholder': 'Enter your username'
+        }),
+        label=False
+    )
     
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.password = make_password(self.cleaned_data["password"])
-        if commit:
-            user.save()
-        return user
-    
-class UserLoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'reg__input', 'placeholder': 'Email Address'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'reg__input', 'placeholder': 'Password'}))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'reg__input',
+            'placeholder': 'Enter your new password'
+        }),
+        label=False
+    )
 
-# class ProfileImageForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ['profile_image']
+class BlogPageForm(forms.ModelForm):
+    class Meta:
+        model = BlogPage
+        fields = [
+            'title',
+            'profile_image',
+            'meta_description',
+            'published_date',
+            'status',
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'page__form__input'}),
+            'profile_image': forms.ClearableFileInput(attrs={'class': 'page__form__input'}),
+            'meta_description': forms.Textarea(attrs={'class': 'page__form__input'}),
+            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')]),
+        }
+
+class ArticleForm(forms.ModelForm):
+    page_name = forms.CharField(label='Page Name', max_length=200, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Article
+        fields = [
+            'title',
+            'page_name',
+            'article_image',
+            'content',
+            'published_date',
+            'allow_to_comment',
+            'view_count',
+            'category',
+            'tag'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'article_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'published_date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'allow_to_comment': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'view_count': forms.NumberInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'tag': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    def clean_page_name(self):
+        page_name = self.cleaned_data.get('page_name')
+        try:
+            blog_page = BlogPage.objects.get(title=page_name)
+        except BlogPage.DoesNotExist:
+            raise forms.ValidationError(f"BlogPage with title '{page_name}' does not exist.")
+        return blog_page 
+
     

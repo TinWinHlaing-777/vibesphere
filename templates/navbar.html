@@ -5,19 +5,28 @@
       <a href="{% url 'welcome' %}" class="nav__list__item">Home</a>
     </li>
     <li class="nav__list">
-      <a href="{% url 'welcome' %}" class="nav__list__item">Pages</a>
+      <a href="{% url 'pages' %}" class="nav__list__item">Pages</a>
     </li>
     <li class="nav__list">
       <a href="{% url 'welcome' %}" class="nav__list__item">Blogs</a>
     </li>
+    {% if user.is_authenticated %}
+    <li class="nav__list">
+      <a href="{% url 'welcome' %}" class="nav__list__item">Create</a>
+    </li>
     <li class="nav__list">
       <a href="{% url 'welcome' %}" class="nav__list__item">Profile</a>
     </li>
+    <li class="nav__list">
+      <a href="{% url 'logout' %}" class="nav__list__item">Logout</a>
+    </li>
+    {% else %}
     <li class="nav__list">
       <a href="{% url 'login' %}" class="nav__list__item">Login</a>
     </li>
     <li class="nav__list">
       <a href="{% url 'register' %}" class="nav__list__item">Signup</a>
     </li>
+    {% endif %}
   </ul>
 </nav>

@@ -1,0 +1,37 @@
+.page__container{
+    width: 90%;
+    margin: auto;
+}
+
+.page__create__btn__container{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.create__link{
+    text-decoration: none;
+}
+
+.create__btn, 
+.update__btn{
+    border: none;
+    width: 10rem;
+    height: 3rem;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.create__btn{
+    background-color: #1E205A;
+}
+
+.update__btn{
+    background-color: #000000;
+}
+
