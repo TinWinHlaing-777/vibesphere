@@ -9,13 +9,14 @@ from django.contrib import messages
 # Create Account Function
 def register_view(request):
     if request.method == 'POST':
-         form = CustomUserCreationForm(request.POST)
-         if form.is_valid():
-              user = form.save()
-              login(request, user)
-              return redirect('welcome')
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('welcome')
     else: 
-         form = CustomUserCreationForm()
+        form = CustomUserCreationForm()
+        messages.error(request, "something went wrong")
     context = {
         'show_navbar': False,
         'form': form,
@@ -57,11 +58,7 @@ def welcome_view(request):
         context = {'show_navbar': True}
         return render(request, 'welcome.html', context)
 
-@login_required
 def show_all_pages(request):
-    redirect_response = redirect_if_not_logged_in(request)
-    if redirect_response:
-        return redirect_response
     context = {'show_navbar': True}
     return render(request, 'pages.html', context)
 
@@ -85,7 +82,11 @@ def blog_page_create(request):
         }
     return render(request, 'page_form.html', context)
 
+@login_required
 def manage_page(request, user_id=None):
+    redirect_response = redirect_if_not_logged_in(request)
+    if redirect_response:
+        return redirect_response
     if user_id:
         user = get_object_or_404(User, id=user_id)
     else:
@@ -124,7 +125,7 @@ def update_page(request, title):
         'form': form,
         'page': page
     }
-    return render(request, 'page_form.html', context)
+    return render(request, 'page_form.html', context )
     
 @login_required
 def create_update_article(request, article_id=None):

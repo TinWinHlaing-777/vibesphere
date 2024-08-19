@@ -7,12 +7,17 @@
 {% block content %}
 <div class="page__container">
     <div class="page__create__btn__container">
-        <a href="{% url 'create_page' %}" class="create__link">
-            <button class="create__btn">Create a Page</button>    
-        </a>
-        <a href="{% url 'manage_page' user.id %}" class="create__link">
-            <button class="update__btn">Manage Page</button>    
-        </a>
+        {% if user.is_authenticated %}
+            {% if request.user.blogpage_set.exists %}
+                <a href="{% url 'manage_page' user.id %}" class="create__link">
+                    <button class="update__btn">Manage Page</button>    
+                </a>
+            {% else %}
+                <a href="{% url 'create_page' %}" class="create__link">
+                    <button class="create__btn">Create a Page</button>    
+                </a>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 
