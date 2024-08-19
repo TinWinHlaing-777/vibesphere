@@ -71,9 +71,9 @@ class BlogPageForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'page__form__input'}),
             'profile_image': forms.ClearableFileInput(attrs={'class': 'page__form__input'}),
-            'meta_description': forms.Textarea(attrs={'class': 'page__form__input'}),
-            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')]),
+            'meta_description': forms.Textarea(attrs={'class': 'page__form__input', 'placeholder': 'Describe the aim and purpose of creating this page in a few words.'}),
+            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'page__form__input'}),
+            'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')], attrs={'class': 'page__form__input'}),
         }
 
 class ArticleForm(forms.ModelForm):

@@ -7,31 +7,30 @@
 {% block content %}
     <div class="page__form__container">
         <div class="left__container">
-            <h1 class="page__form__header">Start With Small Steps</h1>
+            <h1 class="page__form__header">Create a page to share your vibes.</h1>
             <form method="post" enctype="multipart/form-data" class="page__form">
                 {% csrf_token %}
                 <div class="page__form__group">
-                    <label for="id_title">Title</label>
+                    <label class="page__form__label" for="id_title">Title</label>
                     {{ form.title}}
                 </div>
                 <div class="page__form__group">
-                    <label for="id_image">Page Profile Image</label>
+                    <label class="page__form__label" for="id_image">Page Profile Image</label>
                     {{ form.profile_image}}
                 </div>
                 <div class="page__form__group">
-                    <label for="id_text">Description</label>
+                    <label class="page__form__label" for="id_text">Description</label>
                     {{ form.meta_description}}
                 </div>
                 <div class="page__form__group">
-                    <label for="id_text">Published Date</label>
+                    <label class="page__form__label" for="id_text">Published Date</label>
                     {{ form.published_date}}
                 </div>
                 <div class="page__form__group">
-                    <label for="id_text">Status</label>
+                    <label class="page__form__label" for="id_text">Status</label>
                     {{ form.status}}
                 </div>
-                <!-- {{ form.as_p }} -->
-                <button type="submit">Save</button>
+                <button type="submit" class="create__page__btn">Save</button>
             </form>
         </div>
         <div class="right__container"></div>

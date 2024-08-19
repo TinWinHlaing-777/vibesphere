@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm, CustomLoginForm, BlogPageForm, ArticleForm
 from django.contrib.auth.decorators import login_required
-from .models import Article
+from .models import Article, BlogPage
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create Account Function
 def register_view(request):
@@ -55,7 +57,11 @@ def welcome_view(request):
         context = {'show_navbar': True}
         return render(request, 'welcome.html', context)
 
+@login_required
 def show_all_pages(request):
+    redirect_response = redirect_if_not_logged_in(request)
+    if redirect_response:
+        return redirect_response
     context = {'show_navbar': True}
     return render(request, 'pages.html', context)
 
@@ -79,6 +85,47 @@ def blog_page_create(request):
         }
     return render(request, 'page_form.html', context)
 
+def manage_page(request, user_id=None):
+    if user_id:
+        user = get_object_or_404(User, id=user_id)
+    else:
+        messages.error(request,'No user specified')
+        return redirect('welcome')
+    pages = BlogPage.objects.filter(author=user)
+
+    if pages.exists():
+        if pages.count() > 1:
+            messages.warning(request, 'Multiple pages found. Showing the first page.')
+        page = pages.first()  
+        return redirect('update_page', title=page.title)
+    else:
+        messages.info(request, 'You do not have a page. Please create a new page.')
+        return redirect('create_page')
+    
+@login_required
+def update_page(request, title):
+    redirect_response = redirect_if_not_logged_in(request)
+    if redirect_response:
+        return redirect_response
+    page = get_object_or_404(BlogPage, title=title)
+    if page.author != request.user:
+        messages.error(request, 'You do not have permission to edit this page.')
+        return redirect('create_page')
+    if request.method == 'POST':
+        form = BlogPageForm(request.POST, request.FILES, instance=page)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Page updated successfully.')
+            return redirect('pages', title=page.title)  
+    else:
+        form = BlogPageForm(instance=page)
+    context = {
+        'show_navbar': True,
+        'form': form,
+        'page': page
+    }
+    return render(request, 'page_form.html', context)
+    
 @login_required
 def create_update_article(request, article_id=None):
     if article_id:

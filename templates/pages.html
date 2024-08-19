@@ -10,7 +10,7 @@
         <a href="{% url 'create_page' %}" class="create__link">
             <button class="create__btn">Create a Page</button>    
         </a>
-        <a href="{% url 'create_page' %}" class="create__link">
+        <a href="{% url 'manage_page' user.id %}" class="create__link">
             <button class="update__btn">Manage Page</button>    
         </a>
     </div>

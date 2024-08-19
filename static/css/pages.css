@@ -35,3 +35,8 @@
     background-color: #000000;
 }
 
+.update__btn:hover{
+    transition: 0.3s ease all;
+    background-color: #242424;
+}
+
