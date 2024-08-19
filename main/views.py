@@ -135,10 +135,10 @@ def create_update_article(request, article_id=None):
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            blog_page = form.save(commit=False)  # Do not save to the database yet
-            blog_page.author = request.user  # Set the current user as the author
+            blog_page = form.save(commit=False)  
+            blog_page.author = request.user  
             blog_page.save()  
-            return redirect('welcome')  # Redirect to a list of articles or another page
+            return redirect('welcome')
     else:
         form = ArticleForm(instance=article)
 
