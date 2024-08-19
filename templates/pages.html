@@ -7,7 +7,11 @@
 {% block content %}
 <div class="page__container">
     <div class="page__create__btn__container">
+<<<<<<< HEAD
         {% if user.is_authenticated %}
+=======
+       {% if user.is_authenticated %}
+>>>>>>> main
             {% if request.user.blogpage_set.exists %}
                 <a href="{% url 'manage_page' user.id %}" class="create__link">
                     <button class="update__btn">Manage Page</button>    
