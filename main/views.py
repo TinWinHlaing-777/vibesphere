@@ -59,9 +59,6 @@ def welcome_view(request):
 
 @login_required
 def show_all_pages(request):
-    redirect_response = redirect_if_not_logged_in(request)
-    if redirect_response:
-        return redirect_response
     context = {'show_navbar': True}
     return render(request, 'pages.html', context)
 
@@ -86,6 +83,9 @@ def blog_page_create(request):
     return render(request, 'page_form.html', context)
 
 def manage_page(request, user_id=None):
+    redirect_response = redirect_if_not_logged_in(request)
+    if redirect_response:
+        return redirect_response
     if user_id:
         user = get_object_or_404(User, id=user_id)
     else:
