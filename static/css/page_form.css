@@ -1,17 +1,25 @@
 .page__form__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     width: 90%;
     margin: auto;
     margin-top: 2%;
+
 }
 
-.page__form__header{
+.left__container{
+    width: 100%;
+}
+
+.form__header{
     color: #1E205A;
     text-transform: uppercase;
     font-size: 2rem;
     font-weight: 900;
 }
 
-.page__form{
+.form{
     width: 70%;
     height: auto;
     margin-top: 3rem;
@@ -20,18 +28,18 @@
     border-radius: 10px;
 }
 
-.page__form__group{
+.form__group{
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
 }
 
-.page__form__label{
+.form__label{
     margin-bottom: .5rem;
 }
 
-.page__form__input{
+.form__input{
     background-color: transparent;
     border: none;
     border: 1px solid #1E205A;
@@ -42,7 +50,7 @@
     font-family: "Montserrat", sans-serif;
 }
 
-.create__page__btn{
+.save__btn{
     width: 100%;
     height: 20%;
     background-color: #000000;
@@ -56,7 +64,7 @@
     font-weight: 300;
 }
 
-.create__page__btn:hover {
+.save__btn:hover {
     transition: 0.3s ease all;
     background-color: #242424;
 }

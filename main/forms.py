@@ -69,15 +69,15 @@ class BlogPageForm(forms.ModelForm):
             'status',
         ]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'page__form__input'}),
-            'profile_image': forms.ClearableFileInput(attrs={'class': 'page__form__input'}),
-            'meta_description': forms.Textarea(attrs={'class': 'page__form__input', 'placeholder': 'Describe the aim and purpose of creating this page in a few words.'}),
-            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'page__form__input'}),
-            'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')], attrs={'class': 'page__form__input'}),
+            'title': forms.TextInput(attrs={'class': 'form__input'}),
+            'profile_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
+            'meta_description': forms.Textarea(attrs={'class': 'form__input', 'placeholder': 'Describe the aim and purpose of creating this page in a few words.'}),
+            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form__input'}),
+            'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')], attrs={'class': 'form__input'}),
         }
 
 class ArticleForm(forms.ModelForm):
-    page_name = forms.CharField(label='Page Name', max_length=200, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    page_name = forms.CharField(label='Page Name', max_length=200, widget=forms.TextInput(attrs={'class': 'form__input'}))
 
     class Meta:
         model = Article
@@ -88,19 +88,17 @@ class ArticleForm(forms.ModelForm):
             'content',
             'published_date',
             'allow_to_comment',
-            'view_count',
             'category',
             'tag'
         ]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'article_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
-            'published_date': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'title': forms.TextInput(attrs={'class': 'form__input'}),
+            'article_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
+            'content': forms.Textarea(attrs={'class': 'form__input'}),
+            'published_date': forms.DateTimeInput(attrs={'class': 'form__input', 'type': 'datetime-local'}),
             'allow_to_comment': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'view_count': forms.NumberInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
-            'tag': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form__input'}),
+            'tag': forms.Select(attrs={'class': 'form__input'}),
         }
 
     def clean_page_name(self):

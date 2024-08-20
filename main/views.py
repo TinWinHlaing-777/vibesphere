@@ -141,8 +141,11 @@ def create_update_article(request, article_id=None):
             return redirect('welcome')
     else:
         form = ArticleForm(instance=article)
-
-    return render(request, 'create_article.html', {'form': form})
+    context = {
+        'show_navbar': True,
+        'form': form,
+    }
+    return render(request, 'create_article.html', context)
 
 
 
