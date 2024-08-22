@@ -12,9 +12,25 @@
     <form method="post" class="reg__form">
         <h1 class="reg__form__header">Create New Account</h1>
         {% csrf_token %}
-        {% for field in form %}
+        <!-- {% for field in form %}
             {{ field }}
-        {% endfor %}
+        {% endfor %} -->
+        {% if form_errors %}
+            <div class="form-errors">
+                <p>Please correct the errors below:</p>
+                <ul>
+                    {% for field, errors in form_errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {{ form.username }}
+        {{ form.email }}
+        {{ form.password1 }}
+        {{ form.password2 }}
     <button type="submit" class="submit__btn">Create Account</button>
     <p class="append__text">Already have an account?</p>
     <a href="{%url 'login'%}" class="append__link">Please login!</a>

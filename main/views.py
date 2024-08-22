@@ -8,19 +8,24 @@ from django.contrib import messages
 
 # Create Account Function
 def register_view(request):
-    if request.method == 'POST':
-         form = CustomUserCreationForm(request.POST)
-         if form.is_valid():
-              user = form.save()
-              login(request, user)
-              return redirect('welcome')
-    else: 
-         form = CustomUserCreationForm()
-    context = {
-        'show_navbar': False,
-        'form': form,
-    }
-    return render(request, 'register.html', context)
+        if request.method == 'POST':
+            form = CustomUserCreationForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                return redirect('welcome')
+            else:
+                form_errors = form.errors
+        else: 
+            form = CustomUserCreationForm()
+            form_errors = None
+        context = {
+            'show_navbar': False,
+            'form': form,
+            'form_errors': form_errors
+        }
+        return render(request, 'register.html', context)
+
 
 # Login Function
 def login_view(request): 
