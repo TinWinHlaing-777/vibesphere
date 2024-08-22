@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {%block extra_css %}
-<link rel="stylesheet" href="{% static 'css/page__form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/page_form.css' %}" />
 <link rel="stylesheet" href="{% static 'css/create_article.css' %}" />
 {% endblock %}
 {% block content %}
@@ -46,9 +46,25 @@
         <button type="submit" class="save__btn">Save Article</button>
       </form>
   </div>
-  <div class="right__article__container">Right</div>
+  {% if articles%}
+  <div class="right__article__container">
+    <h1 class="article__list__header">You Recently Created</h1>
+    <div class="article__list__container">
+      {% for article in articles%}
+        <div class="article__card">
+          <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
+          <div class="article__body">
+            <h2 class="article__card__title">{{article.title}}</h2>
+            <p class="article__card__content">{{article.content|truncatewords:20}}</p>
+            <p class="article__card__span__text">Created By: {{article.author}}</p>
+            <p class="article__card__span__text">Published at: {{article.published_date}}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 </div>
-  
   {% if messages %}
     <ul>
       {% for message in messages %}

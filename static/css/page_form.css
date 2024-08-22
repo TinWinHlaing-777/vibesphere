@@ -9,7 +9,7 @@
 }
 
 .left__container{
-    width: 100%;
+    width: 65%;
 }
 
 .form__header{
@@ -20,7 +20,7 @@
 }
 
 .form{
-    width: 70%;
+    width: 100%;
     height: auto;
     margin-top: 3rem;
     background-color: #ffffff;
@@ -50,11 +50,9 @@
     font-family: "Montserrat", sans-serif;
 }
 
-.save__btn{
+.save__btn, .delete__btn{
     width: 100%;
     height: 20%;
-    background-color: #000000;
-    color: #ffffff;
     margin-top: 1rem;
     padding: 1rem;
     border: none;
@@ -62,9 +60,64 @@
     cursor: pointer;
     font-size: 1.2rem;
     font-weight: 300;
+    color: #ffffff;
+}
+
+.save__btn{
+    background-color: #000000;
 }
 
 .save__btn:hover {
     transition: 0.3s ease all;
     background-color: #242424;
+}
+
+.delete__btn{
+    background-color: red;
+}
+
+.right__container{
+    width: 30%;
+    background-color: #ffffff;
+    height: auto;
+    margin-top: 7%;
+    border-radius: 10px;
+}
+
+.page__image{
+    width: 100%;
+    height: 200px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.page__info__container{
+    padding: 1rem;
+}
+
+.page__title{
+    color: #1E205A;
+    font-weight: 600;
+    margin-top: 1rem;
+
+}
+
+.page__body{
+    font-size: .8rem;
+    font-weight: 300;
+    margin-top: 1rem;
+}
+
+.manage__btn{
+    text-decoration: none;
+    width: 100%;
+    margin: auto;
+    background-color: #000000;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 1rem;
+    padding: .5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
 }
