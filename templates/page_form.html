@@ -31,8 +31,24 @@
                     {{ form.status}}
                 </div>
                 <button type="submit" class="save__btn">Save</button>
+                {% if page %}
+                    <button type="submit" name="delete_page" value="delete" class="delete__btn" onclick="return confirm('Are you sure you want to delete this page?');">Delete Page</button>
+                {% endif %}
             </form>
         </div>
-        <div class="right__container"></div>
+        {% if page %}
+            <div class="right__container">
+                <img src="{{ page.profile_image.url }}" alt="{{ page.title }}" class="page__image">
+                <div class="page__info__container">
+                    <h2 class="page__title">{{ page.title }}</h2>
+                    <p class="page__body">{{ page.meta_description }}</p>
+                    <p class="page__body">{{ page.published_date }}</p>
+                    <p class="page__body">{{ page.get_status_display }}</p>
+                    <a href="#">
+                        <button class="manage__btn">Manage Articles</button>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

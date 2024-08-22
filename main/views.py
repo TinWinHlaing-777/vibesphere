@@ -8,19 +8,24 @@ from django.contrib import messages
 
 # Create Account Function
 def register_view(request):
-    if request.method == 'POST':
-         form = CustomUserCreationForm(request.POST)
-         if form.is_valid():
-              user = form.save()
-              login(request, user)
-              return redirect('welcome')
-    else: 
-         form = CustomUserCreationForm()
-    context = {
-        'show_navbar': False,
-        'form': form,
-    }
-    return render(request, 'register.html', context)
+        if request.method == 'POST':
+            form = CustomUserCreationForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                login(request, user)
+                return redirect('welcome')
+            else:
+                form_errors = form.errors
+        else: 
+            form = CustomUserCreationForm()
+            form_errors = None
+        context = {
+            'show_navbar': False,
+            'form': form,
+            'form_errors': form_errors
+        }
+        return render(request, 'register.html', context)
+
 
 # Login Function
 def login_view(request): 
@@ -57,10 +62,14 @@ def welcome_view(request):
         context = {'show_navbar': True}
         return render(request, 'welcome.html', context)
 
-@login_required
 def show_all_pages(request):
-    context = {'show_navbar': True}
+    pages = BlogPage.objects.all()
+    context = {
+        'show_navbar': True,
+        'pages': pages
+    }
     return render(request, 'pages.html', context)
+
 
 @login_required
 def blog_page_create(request):
@@ -82,6 +91,7 @@ def blog_page_create(request):
         }
     return render(request, 'page_form.html', context)
 
+@login_required
 def manage_page(request, user_id=None):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
@@ -107,16 +117,21 @@ def update_page(request, title):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
-    page = get_object_or_404(BlogPage, title=title)
+    page = get_object_or_404(BlogPage, title__iexact=title.lower())
     if page.author != request.user:
         messages.error(request, 'You do not have permission to edit this page.')
         return redirect('create_page')
     if request.method == 'POST':
-        form = BlogPageForm(request.POST, request.FILES, instance=page)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Page updated successfully.')
-            return redirect('pages', title=page.title)  
+        if 'delete_page' in request.POST:
+            page.delete()
+            messages.success(request, 'Page deleted successfully.')
+            return redirect('pages') 
+        else:
+            form = BlogPageForm(request.POST, request.FILES, instance=page)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Page updated successfully.')
+                return redirect('pages')  
     else:
         form = BlogPageForm(instance=page)
     context = {
@@ -128,6 +143,11 @@ def update_page(request, title):
     
 @login_required
 def create_update_article(request, article_id=None):
+    redirect_response = redirect_if_not_logged_in(request)
+    if redirect_response:
+        return redirect_response
+    blog_page = get_object_or_404(BlogPage, author=request.user)
+    articles = Article.objects.filter(page_name=blog_page)
     if article_id:
         article = Article.objects.get(pk=article_id)
     else:
@@ -144,6 +164,7 @@ def create_update_article(request, article_id=None):
     context = {
         'show_navbar': True,
         'form': form,
+        'articles': articles
     }
     return render(request, 'create_article.html', context)
 
@@ -164,6 +185,7 @@ def read_article(request, id):
         'suggested_articles': suggested_articles,
     }
     return render(request, 'read_article.html', context)
+
 
 
 

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import BlogPage, Article
+from django.core.exceptions import ValidationError
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
@@ -40,6 +42,11 @@ class CustomUserCreationForm(UserCreationForm):
         labels = {
             'username': False,
         }
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if username and not username.isalnum():
+            raise ValidationError('Username cannot contain any space.')
+        return username
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
