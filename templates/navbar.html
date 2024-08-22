@@ -8,7 +8,7 @@
       <a href="{% url 'pages' %}" class="nav__list__item">Pages</a>
     </li>
     <li class="nav__list">
-      <a href="{% url 'welcome' %}" class="nav__list__item">Blogs</a>
+      <a href="{% url 'show_all_articles' %}" class="nav__list__item">Blogs</a>
     </li>
     {% if user.is_authenticated %}
     <li class="nav__list">

@@ -1,0 +1,50 @@
+{%extends 'main.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/articles.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="main__container">
+    <div class="content-container">
+        <!-- Main Article Content -->
+        <div class="article-detail">
+            <h1>{{ article.title }}</h1>
+            <p><i>{{ article.category.name }}</i></p>
+            <div class="article-image">
+                <img src="{{ article.article_image.url }}">
+            </div>
+            <div class="article-text">
+                <p>{{ article.content }}</p>
+            </div>
+            <p>Published Date: {{ article.published_date }}</p>
+            <p>Author: {{ article.author }}</p>
+        </div>
+
+        <!-- Suggested Articles Sidebar -->
+        <div class="suggested-articles">
+            <h3>Suggested Articles</h3>
+           {% for article in suggested_articles %}
+            <div class="suggested-article-card">
+
+                <div class="suggested-img-container">
+                    <img src="{{ article.article_image.url }}" >
+                </div>
+
+                <div class="suggested-article-details">
+                    <h3><a href="{% url 'read_article' article.title %}">{{ article.title|truncatewords:5 }}</a></h3>
+                    <p>{{ article.content|truncatewords:10 }}</p>
+                    <p>{{ article.view_count }}  | {{ article.published_date }}</p>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+    <div class="footer">
+        Footer Session
+    </div>

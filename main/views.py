@@ -147,6 +147,24 @@ def create_update_article(request, article_id=None):
     }
     return render(request, 'create_article.html', context)
 
+def show_all_articles(request):
+    articles = Article.objects.all()
+    context = {
+        'show_navbar': True,
+        'articles': articles,
+    }
+    return render(request, 'articles.html', context)
+
+def read_article(request, id):
+    article = get_object_or_404(Article, title=id)
+    suggested_articles = Article.objects.all()
+    context = {
+        'show_navbar': True,
+        'article': article,
+        'suggested_articles': suggested_articles,
+    }
+    return render(request, 'read_article.html', context)
+
 
 
 

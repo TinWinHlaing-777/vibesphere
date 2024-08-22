@@ -1,0 +1,43 @@
+{%extends 'main.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/articles.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="main__container">
+    <div class="content-wrapper">
+        <div class="articles-container">
+            {% for article in articles %}
+            <div class="article-card">
+
+                <div class="img-container">
+                    <img src="{{ article.article_image.url }}" >
+                </div>
+
+                <div class="article-details">
+                    <h3><a href="{% url 'read_article' article.title %}">{{ article.title|truncatewords:10  }}</a></h3>
+                    <p>{{ article.content|truncatewords:15 }}</p>
+                    <p>{{ article.view_count }}  | {{ article.published_date }}</p>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="categories-container">
+            {% for article in articles %}
+            <div class="category-card">
+                <p>{{ article.category }}</p>
+            </div>
+            {% endfor %}
+            <a href="#" class="explore-link">Explore More Categories</a>
+        </div>
+    </div>
+</div>
+
+
+    <div class="footer">Footer Session</div>
+
+{% endblock %}

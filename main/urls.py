@@ -17,4 +17,6 @@ urlpatterns = [
     path('page/new', views.blog_page_create, name="create_page"),
     path('page/manage/<int:user_id>/', views.manage_page, name="manage_page"),
     path('page/update/<str:title>/', views.update_page, name="update_page"),
+        path('articles/', views.show_all_articles, name="show_all_articles"),
+    path('articles/<str:id>/', views.read_article, name="read_article"),
 ]
