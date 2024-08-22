@@ -146,8 +146,8 @@ def create_update_article(request, article_id=None):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
-    blog_page = get_object_or_404(BlogPage, author=request.user)
-    articles = Article.objects.filter(page_name=blog_page)
+    blog_pages = BlogPage.objects.filter(author=request.user)
+    articles = Article.objects.filter(page_name__in=blog_pages)
     if article_id:
         article = Article.objects.get(pk=article_id)
     else:
@@ -170,6 +170,7 @@ def create_update_article(request, article_id=None):
 
 def show_all_articles(request):
     articles = Article.objects.all()
+    print(articles)
     context = {
         'show_navbar': True,
         'articles': articles,
@@ -185,7 +186,6 @@ def read_article(request, id):
         'suggested_articles': suggested_articles,
     }
     return render(request, 'read_article.html', context)
-
 
 
 

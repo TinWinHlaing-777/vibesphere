@@ -11,10 +11,11 @@
         <div class="articles-container">
             {% for article in articles %}
             <div class="article-card">
-                <p>{{article.title}}</p>
-                <div class="img-container">
-                    <img src="{{ article.article_image.url }}" >
-                </div>
+                {% if article.article_image %}
+                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="img-container img">
+              {% else %}
+              <p>No image available</p>
+              {% endif %}
                 <div class="article-details">
                     <h3><a href="{% url 'read_article' article.title %}">{{ article.title|truncatewords:10  }}</a></h3>
                     <p>{{ article.content|truncatewords:15 }}</p>

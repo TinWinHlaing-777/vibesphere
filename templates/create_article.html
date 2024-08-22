@@ -50,9 +50,13 @@
   <div class="right__article__container">
     <h1 class="article__list__header">You Recently Created</h1>
     <div class="article__list__container">
-      {% for article in articles%}
+      {% for article in articles %}
         <div class="article__card">
-          <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
+            {% if article.article_image %}
+              <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
+            {% else %}
+            <p>No image available</p>
+            {% endif %}
           <div class="article__body">
             <h2 class="article__card__title">{{article.title}}</h2>
             <p class="article__card__content">{{article.content|truncatewords:20}}</p>
