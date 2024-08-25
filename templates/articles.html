@@ -7,37 +7,50 @@
 
 {% block content %}
 <div class="main__container">
-    <div class="content-wrapper">
-        <div class="articles-container">
-            {% for article in articles %}
-            <div class="article-card">
-                {% if article.article_image %}
-                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="img-container img">
-              {% else %}
-              <p>No image available</p>
-              {% endif %}
-                <div class="article-details">
-                    <h3><a href="{% url 'read_article' article.title %}">{{ article.title|truncatewords:10  }}</a></h3>
-                    <p>{{ article.content|truncatewords:15 }}</p>
-                    <p>{{ article.view_count }}  | {{ article.published_date }}</p>
-                </div>
-
-            </div>
+    <div class="articles-container">
+    {% if is_by_page %}
+            {% for article in articles_by_page %}
+                {% if article %}
+                    <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
+                        <div class="article-card">
+                            {% if article.article_image %}
+                                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                            <div class="article-details">
+                                <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
+                                <p class="article__content">{{ article.content|truncatewords:15 }}</p>
+                                <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+                                <a href="{% url 'edit_article' article.title %}">
+                                    <button class="edit__article">Edit</button>
+                                </a>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <h4 style="color: red;">There is no article available here.</h4>
+                {% endif %}
             {% endfor %}
-        </div>
-
-        <div class="categories-container">
+        {% else %}
             {% for article in articles %}
-            <div class="category-card">
-                <p>{{ article.category }}</p>
-            </div>
+                    <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
+                        <div class="article-card">
+                            {% if article.article_image %}
+                                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                            <div class="article-details">
+                                <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
+                                <p class="article__content">{{ article.content|truncatewords:15 }}</p>
+                                <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+                            </div>
+                        </div>
+                    </a>
             {% endfor %}
-            <a href="#" class="explore-link">Explore More Categories</a>
+            {% endif %}
         </div>
-    </div>
 </div>
-
-
-    <div class="footer">Footer Session</div>
-
+<div class="footer">Footer Session</div>
 {% endblock %}

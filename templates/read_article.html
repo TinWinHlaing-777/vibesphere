@@ -2,45 +2,43 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {%block extra_css %}
-<link rel="stylesheet" href="{% static 'css/articles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/detail__article.css' %}" />
 {% endblock %}
 
 {% block content %}
-<div class="main__container">
-    <div class="content-container">
-        <!-- Main Article Content -->
-        <div class="article-detail">
-            <h1>{{ article.title }}</h1>
-            <p><i>{{ article.category.name }}</i></p>
-            <div class="article-image">
-                <img src="{{ article.article_image.url }}">
-            </div>
-            <div class="article-text">
-                <p>{{ article.content }}</p>
-            </div>
-            <p>Published Date: {{ article.published_date }}</p>
-            <p>Author: {{ article.author }}</p>
-        </div>
+<div class="main__detail__container">
+    <!-- Main Article Content -->
+    <div class="detail__article">
+        <h1 class="detail__article__title">{{ article.title }}</h1>
+        <p class="detail__article__author">Vibe from - {{ article.author }}</p>
+        <p>{{ article.category.name }}</p>
+        {% if article.article_image %}
+            <img src="{{article.article_image.url}}" alt="{{article.title}}" class="detail__article__image">
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
+        <p class="article__text">{{article.view_count}} viewers</p>
+        <p class="article__text">{{ article.content }}</p>
+        <p class="article__text">Published At: {{ article.published_date }}</p>
+    </div>
 
-        <!-- Suggested Articles Sidebar -->
-        <div class="suggested-articles">
-            <h3>Suggested Articles</h3>
-           {% for article in suggested_articles %}
-            <div class="suggested-article-card">
-
-                <div class="suggested-img-container">
-                    <img src="{{ article.article_image.url }}" >
+    <!-- Suggested Articles Sidebar -->
+    <div class="suggested__container">
+        <h3 class="suggested__container__title">Suggested Articles</h3>
+        {% for article in suggested_articles %}
+            <a href="{% url 'read_article' article.title %}" class="suggested__article__card">
+                {% if article.article_image %}
+                    <img src="{{article.article_image.url}}" alt="{{article.title}}" class="suggested__card__image">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+                <div class="suggested__article__details">
+                    <h3 class="suggested__card__title">{{ article.title|truncatewords:5 }}</h3>
+                    <p class="suggested__card__text">{{ article.content|truncatewords:10 }}</p>
+                    <p class="suggested__card__text">{{ article.published_date }}</p>
                 </div>
-
-                <div class="suggested-article-details">
-                    <h3><a href="{% url 'read_article' article.title %}">{{ article.title|truncatewords:5 }}</a></h3>
-                    <p>{{ article.content|truncatewords:10 }}</p>
-                    <p>{{ article.view_count }}  | {{ article.published_date }}</p>
-                </div>
-
-            </div>
-            {% endfor %}
-        </div>
+            </a>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

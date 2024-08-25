@@ -73,6 +73,7 @@
     font-weight: 600;
     margin-bottom: 1rem;
     font-size: 1rem;
+    color: #1E205A;
 }
 
 .page__card__desc,
@@ -80,5 +81,6 @@
     font-weight: 200;
     font-size: .8rem;
     margin-bottom: .5rem;
+    color: #1E205A;
 }
 
