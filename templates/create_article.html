@@ -8,7 +8,13 @@
 {% block content %}
 <div class="create__article__container">
   <div class="left__article__container">
-      <h2 class="form__header">Create New Article</h2>
+      <h2 class="form__header">
+        {% if is_editing %}
+          Edit Article
+        {% else %}
+          Create New Article
+        {% endif %}
+      </h2>
       <form method="post" enctype="multipart/form-data" class="form">
         {% csrf_token %}
         <div class="form__group">
@@ -44,15 +50,20 @@
             {{ form.tag}}
         </div>
         <button type="submit" class="save__btn">Save Article</button>
+        <button type="submit" name="delete" value="true" class="delete__btn" onclick="return confirm('Are you sure you want to delete this page?');">Delete Article</button>
       </form>
   </div>
   {% if articles%}
   <div class="right__article__container">
     <h1 class="article__list__header">You Recently Created</h1>
     <div class="article__list__container">
-      {% for article in articles%}
+      {% for article in articles %}
         <div class="article__card">
-          <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
+            {% if article.article_image %}
+              <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
+            {% else %}
+              <p>No image available</p>
+            {% endif %}
           <div class="article__body">
             <h2 class="article__card__title">{{article.title}}</h2>
             <p class="article__card__content">{{article.content|truncatewords:20}}</p>

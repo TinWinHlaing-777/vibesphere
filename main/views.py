@@ -142,29 +142,40 @@ def update_page(request, title):
     return render(request, 'page_form.html', context)
     
 @login_required
-def create_update_article(request, article_id=None):
+def create_update_article(request, article_title=None):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
-    blog_page = get_object_or_404(BlogPage, author=request.user)
-    articles = Article.objects.filter(page_name=blog_page)
-    if article_id:
-        article = Article.objects.get(pk=article_id)
+    blog_pages = BlogPage.objects.filter(author=request.user)
+    if not blog_pages.exists():
+        return redirect('create_page') 
+    articles = Article.objects.filter(page_name__in=blog_pages)
+    if article_title:
+        article = get_object_or_404(Article, title=article_title, page_name__in=blog_pages)
+        is_editing = True
     else:
         article = None
+        is_editing = False
     if request.method == 'POST':
+        if 'delete' in request.POST:
+            # Handle deletion
+            if article:
+                article.delete()
+            return redirect('show_all_articles')
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
             blog_page = form.save(commit=False)  
             blog_page.author = request.user  
             blog_page.save()  
-            return redirect('welcome')
+            return redirect('show_all_articles')
     else:
         form = ArticleForm(instance=article)
     context = {
         'show_navbar': True,
         'form': form,
-        'articles': articles
+        'articles': articles,
+        'is_editing': is_editing,
+        'article': article,
     }
     return render(request, 'create_article.html', context)
 
@@ -173,18 +184,35 @@ def show_all_articles(request):
     context = {
         'show_navbar': True,
         'articles': articles,
+        'is_by_page': False,
     }
     return render(request, 'articles.html', context)
 
 def read_article(request, id):
     article = get_object_or_404(Article, title=id)
     suggested_articles = Article.objects.all()
+    article.view_count += 1
+    article.save(update_fields=['view_count'])
     context = {
         'show_navbar': True,
         'article': article,
         'suggested_articles': suggested_articles,
     }
     return render(request, 'read_article.html', context)
+
+@login_required
+def articles_by_page(request, page_name):
+    page = get_object_or_404(BlogPage, title=page_name)
+    articles = Article.objects.filter(page_name=page)
+
+    context = {
+        'show_navbar': True,
+        'page': page,
+        'articles_by_page': articles,
+        'is_by_page': True,
+    }
+    return render(request, 'articles.html', context)
+
 
 
 

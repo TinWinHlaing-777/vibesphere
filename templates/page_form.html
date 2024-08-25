@@ -44,7 +44,7 @@
                     <p class="page__body">{{ page.meta_description }}</p>
                     <p class="page__body">{{ page.published_date }}</p>
                     <p class="page__body">{{ page.get_status_display }}</p>
-                    <a href="#">
+                    <a href="{% url 'articles_by_page' page.title%}">
                         <button class="manage__btn">Manage Articles</button>
                     </a>
                 </div>
