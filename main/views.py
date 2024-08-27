@@ -59,9 +59,32 @@ def redirect_if_not_logged_in(request):
 # View Overall Function
 # @login_required
 def welcome_view(request):
-        context = {'show_navbar': True}
+    if request.method == 'POST':
+        query = request.POST.get('query')
+        categories = Article.objects.values_list('category', flat=True).distinct()
+        
+        if query:  
+            articles = Article.objects.filter(category=query)
+        else:
+            articles = Article.objects.all()
+        context = {
+        'show_navbar': True,
+        'articles': articles,
+        'categories': categories,
+        }
         return render(request, 'welcome.html', context)
+    else:
+        categories = Article.objects.values_list('category', flat=True).distinct()
+        articles = Article.objects.all()
+        context = {
+        'show_navbar': True,
+        'articles': articles,
+        'categories': categories,
+        }
+    return render(request, 'welcome.html', context)
 
+ 
+    
 def show_all_pages(request):
     pages = BlogPage.objects.all()
     context = {
