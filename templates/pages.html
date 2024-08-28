@@ -21,14 +21,14 @@
     </div>
     <div class="page__card__container">
         {% for page in pages%}
-            <div class="page__card">
+            <a class="page__card" href="{% url 'articles_by_page' page.title %}" style="text-decoration: none;">
                 <img src="{{page.profile_image.url}}" alt="{{page.title}}" class="page__card__image">
                 <div class="page__body__container">
                     <h2 class="page__card__title">{{page.title}}</h2>
                     <p class="page__card__desc">Published In: {{ page.published_date|date:"F d, Y" }}</p>
                     <p class="page__card__status">Status: {{page.get_status_display}}</p>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 </div>

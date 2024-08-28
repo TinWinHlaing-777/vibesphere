@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import BlogPage, Article
+from .models import BlogPage, Article, Comment
 from django.core.exceptions import ValidationError
 
 
@@ -116,4 +116,10 @@ class ArticleForm(forms.ModelForm):
             raise forms.ValidationError(f"BlogPage with title '{page_name}' does not exist.")
         return blog_page 
 
-    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': 'Enter your comment here...', 'rows': 4}),
+        }
