@@ -35,7 +35,81 @@
 .article__text{
     margin: 1rem 0;
     color: #1E205A;
-    font-weight: 600;
+    font-weight: 300;
+}
+
+.comments__section{
+    margin-top: 5rem;
+}
+
+.comment__header{
+    font-size: 2rem;
+    font-weight: 300;
+    color: #1E205A;
+}
+
+.comment__form__group{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.comment__form__label{
+    font-size: .8rem;
+    font-weight: 300;
+}
+
+.comment__form__input{
+    width: 100%;
+    margin: .5rem 0rem 1rem 0rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #1E205A;
+    padding: 1rem 0rem;
+    outline: none;
+}
+
+.comment__btn{
+    width: 100%;
+    height: 2rem;
+    background-color: #1E205A;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment__container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.comment__detail{
+    display: flex;
+}
+
+.comment__text, 
+.main__comment,
+.comment__date{
+    font-size: .8rem;
+}
+
+.main__comment{
+    margin-left: 2rem;
+}
+
+.comment__date{
+    margin-top: .5rem;
+}
+
+.span__comment__text{
+    font-size: .5rem;
+    margin-top: 2rem;
 }
 
 .suggested__container{
@@ -45,8 +119,9 @@
 .suggested__container__title{
     font-size: 1rem;
     color: #1E205A;
-    margin: 3rem 0 3rem 0;
+    margin: 4rem 0 1rem 0;
     text-transform: uppercase;
+    font-weight: 300;
 }
 
 .suggested__article__card{

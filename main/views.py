@@ -2,9 +2,44 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm, CustomLoginForm, BlogPageForm, ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
-from .models import Article, BlogPage, Comment
+from .models import Article, BlogPage
 from django.contrib.auth.models import User
 from django.contrib import messages
+
+PROHIBITED_KEYWORDS = [
+    'sexual', 'violence', 'political', 'terrorism', 'hate speech', 'explicit',
+    'abuse', 'harassment', 'drug abuse', 'crime', 'scandal',
+    'assault', 'murder', 'rape', 'bullying', 'intimidation',
+    'extremism', 'bigotry', 'discrimination', 'x-rated', 'graphic content',
+    'obscenity', 'profanity', 'vulgarity', 'offensive', 'disturbing',
+    'insult', 'degradation', 'self-harm', 'suicide', 'addiction',
+    'exploitation', 'brutality', 'gore', 'corruption', 'hate crime',
+    'violence against women', 'racism', 'sexism', 'child abuse',
+    'domestic violence', 'terrorist attack', 'hate group', 'radicalism',
+    'cyberbullying', 'human trafficking', 'torture', 'trauma',
+    'harsh language', 'illegal activity', 'abusive language', 'derogatory',
+    'graphic violence', 'explicit content', 'adult content', 'mutilation',
+    'incest', 'pedophilia', 'sadism', 'masochism', 'bully',
+    'gang violence', 'sexual harassment', 'sexual assault', 'hate speech',
+    'racial slur', 'religious intolerance', 'xenophobia', 'antisemitism',
+    'homophobia', 'transphobia', 'violence towards animals', 'eco-terrorism',
+    'genocide', 'war crimes', 'state violence', 'ethnic cleansing',
+    'medical malpractice', 'eugenics', 'slavery', 'forced labor',
+    'hate-mongering', 'dehumanization', 'victim blaming', 'mental abuse',
+    'bullying behavior', 'persecution', 'forced marriage', 'reproductive abuse',
+    'climate denial', 'human rights violations', 'child exploitation', 'hazing',
+    'gaslighting', 'sexual exploitation', 'militant extremism', 'police brutality',
+    'unethical experimentation', 'human rights abuses', 'terrorist propaganda',
+    'mass incarceration', 'wage theft', 'censorship abuse', 'coercion',
+    'unlawful detention', 'illegal surveillance', 'privacy invasion',
+    'hate-fueled rhetoric', 'oppression', 'authoritarianism', 'surveillance abuse',
+    'psychological torture', 'public shaming', 'intellectual property theft',
+    'cyberstalking', 'revenge porn', 'exploitative content', 'non-consensual',
+    'cultural appropriation', 'victimization', 'forced sterilization',
+    'racial profiling', 'exclusionary practices', 'aggressive proselytizing',
+    'manipulation', 'hostile work environment', 'unfair treatment'
+]
+
 
 # Create Account Function
 def register_view(request):
@@ -76,7 +111,7 @@ def welcome_view(request):
         return render(request, 'articles.html', context)
     else:
         categories = Article.objects.values_list('category', flat=True).distinct()
-        latest_articles = Article.objects.order_by('-created_date')[:3]
+        latest_articles = Article.objects.order_by('-created_date')[:6]
         latest_article = Article.objects.order_by('-created_date').first()
         articles = Article.objects.all()
         context = {
@@ -192,6 +227,12 @@ def create_update_article(request, article_title=None):
             return redirect('show_all_articles')
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
+            content = form.cleaned_data.get('content', '')
+
+            # Check for prohibited content
+            if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
+                messages.error(request, "Your content contains prohibited words or phrases and cannot be published.")
+                return redirect('create_page')  # Adjust if needed
             blog_page = form.save(commit=False)  
             blog_page.author = request.user  
             blog_page.save()  
@@ -208,7 +249,7 @@ def create_update_article(request, article_title=None):
     return render(request, 'create_article.html', context)
 
 def show_all_articles(request):
-    articles = Article.objects.all()
+    articles = Article.objects.all().order_by('-created_date')
     context = {
         'show_navbar': True,
         'articles': articles,
@@ -228,7 +269,7 @@ def read_article(request, id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.article = article
-            comment.author = request.user
+            comment.user = request.user
             comment.save()
             return redirect('read_article', id=id)
     else:
@@ -241,26 +282,6 @@ def read_article(request, id):
     }
     return render(request, 'read_article.html', context)
 
-# @login_required
-# def add_comment(request, article_id):
-#     article = get_object_or_404(Article, title=article_id)
-    
-#     if request.method == 'POST':
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             comment.article = article
-#             comment.author = request.user
-#             comment.save()
-#             return redirect('read_article', id=article_id)
-#     else:
-#         form = CommentForm()
-    
-#     context = {
-#         'form': form,
-#         'article': article,
-#     }
-#     return render(request, 'read_article.html', context)
 
 @login_required
 def articles_by_page(request, page_name):

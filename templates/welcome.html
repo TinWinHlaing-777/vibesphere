@@ -3,29 +3,32 @@
 {% block title %}Home{% endblock %}
 {%block extra_css %}
 <link rel="stylesheet" href="{% static 'css/welcome.css' %}" />
-
 {% endblock %}
 {% block content %}
 <div class="welcome__container">
   <div class="main__container">
     {% if latest_article %}
     <div class="left__container"style="background-image: url('{{ latest_article.article_image.url }}');">
-      <h3 class="blog__header">{{latest_article.title }}</h3>
-      <p class="blog__preview"> {{ latest_article.content|truncatewords:50 }} 
-      <a href="{% url 'read_article' latest_article.title %}" class="read__more">Read More</a> </p>
+      <div class="overlay">
+        <div class="text-content">
+          <h3 class="blog__header">{{latest_article.title }}</h3>
+          <p class="blog__preview">
+            {{ latest_article.content|truncatewords:50 }} 
+            <a href="{% url 'read_article' latest_article.title %}" class="read__more">Read More</a> 
+          </p>
+        </div>
+      </div>
     </div>
     {% endif %}
 
     <div class="right__container">
-      <!-- <h3 class="right__header">Latest Articles</h3> -->
       {% for article in latest_articles %}
         <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
           <div class="card__container">
             <div class="card">
               <h4 class="card__title">{{ article.title|truncatewords:20  }}</h4>
               <p class="card__text"> {{ article.content|truncatewords:35 }} </p>
-            </div>
-                      
+            </div>         
           </div>
         </a>
       {% endfor %}
@@ -33,7 +36,7 @@
     
   </div>
 
-  <div class="bottom__container">
+<div class="bottom__container">
   <!-- Article List -->
   <div class="articles-container">
     {% for article in articles %}
@@ -62,20 +65,17 @@
         <form method="POST">
           {% csrf_token %}
             <p>
-            <select name="query" id="query">
-            {% for category in categories %}
-            <option value="{{category}}" >{{category}}</option>
-            {% endfor %}
-            </select>
+              <select name="query" id="query" class="category__list">
+                {% for category in categories %}
+                  <option value="{{category}}" >{{category}}</option>
+                {% endfor %}
+              </select>
           </p>
-          <input type="submit" value="Search">
+          <input type="submit" value="Search" class="category__search__btn">
         </form>
-      
-      
     </div>
   </aside>
 </div>
 </div>
 {% endblock %}
-
 

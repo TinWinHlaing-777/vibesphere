@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="main__container">
-    <h3 class="title"> {{query}} </h3>
+    <h3 class="page__title"> {{query}} </h3>
     <div class="articles-container">
         {% if is_by_page %}
             {% for article in articles_by_page %}
@@ -47,5 +47,4 @@
         {% endif %}
     </div>
 </div>
-<div class="footer">Footer Section</div>
 {% endblock %}

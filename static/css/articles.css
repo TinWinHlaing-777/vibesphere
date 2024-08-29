@@ -4,8 +4,8 @@
   margin: auto;
 }
 
-.title {
-    font-size: 1rem;
+.page__title {
+    font-size: 2rem;
     color: #1E205A;
     margin: 3rem 0 3rem 0;
     text-transform: uppercase;
