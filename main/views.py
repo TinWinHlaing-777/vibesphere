@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
-from .forms import CustomUserCreationForm, CustomLoginForm, BlogPageForm, ArticleForm
+from .forms import CustomUserCreationForm, CustomLoginForm, BlogPageForm, ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
-from .models import Article, BlogPage
+from .models import Article, BlogPage, Comment
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -216,17 +216,51 @@ def show_all_articles(request):
     }
     return render(request, 'articles.html', context)
 
+@login_required
 def read_article(request, id):
+    print(id)
     article = get_object_or_404(Article, title=id)
     suggested_articles = Article.objects.all()
     article.view_count += 1
     article.save(update_fields=['view_count'])
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.author = request.user
+            comment.save()
+            return redirect('read_article', id=id)
+    else:
+        form = CommentForm()
     context = {
         'show_navbar': True,
         'article': article,
         'suggested_articles': suggested_articles,
+        'form': form,
     }
     return render(request, 'read_article.html', context)
+
+# @login_required
+# def add_comment(request, article_id):
+#     article = get_object_or_404(Article, title=article_id)
+    
+#     if request.method == 'POST':
+#         form = CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             comment.article = article
+#             comment.author = request.user
+#             comment.save()
+#             return redirect('read_article', id=article_id)
+#     else:
+#         form = CommentForm()
+    
+#     context = {
+#         'form': form,
+#         'article': article,
+#     }
+#     return render(request, 'read_article.html', context)
 
 @login_required
 def articles_by_page(request, page_name):

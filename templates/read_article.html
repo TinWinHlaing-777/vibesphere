@@ -9,17 +9,41 @@
 <div class="main__detail__container">
     <!-- Main Article Content -->
     <div class="detail__article">
-        <h1 class="detail__article__title">{{ article.title }}</h1>
-        <p class="detail__article__author">Vibe from - {{ article.author }}</p>
-        <p>{{ article.category.name }}</p>
-        {% if article.article_image %}
-            <img src="{{article.article_image.url}}" alt="{{article.title}}" class="detail__article__image">
-        {% else %}
-            <p>No image available</p>
-        {% endif %}
-        <p class="article__text">{{article.view_count}} viewers</p>
-        <p class="article__text">{{ article.content }}</p>
-        <p class="article__text">Published At: {{ article.published_date }}</p>
+        <div class="nested__container">
+            <h1 class="detail__article__title">{{ article.title }}</h1>
+            <p class="detail__article__author">Vibe from - {{ article.author }}</p>
+            <p>{{ article.category.name }}</p>
+            {% if article.article_image %}
+                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="detail__article__image">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+            <p class="article__text">{{article.view_count}} viewers</p>
+            <p class="article__text">{{ article.content }}</p>
+            <p class="article__text">Published At: {{ article.published_date }}</p>
+        </div>
+        <div class="comments__section">
+            <h3>Comments</h3>
+            {% for comment in article.comments.all %}
+                <div class="comment">
+                    <p><strong>{{ comment.author.username }}</strong> said:</p>
+                    <p>{{ comment.content }}</p>
+                    <p class="comment__date">{{ comment.created_date }}</p>
+                </div>
+            {% empty %}
+                <p>No comments yet. Be the first to comment!</p>
+            {% endfor %}
+
+            {% if user.is_authenticated %}
+                <form class="comment__container" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Add Comment</button>
+                </form>
+            {% else %}
+                <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+            {% endif %}
+        </div>
     </div>
 
     <!-- Suggested Articles Sidebar -->
