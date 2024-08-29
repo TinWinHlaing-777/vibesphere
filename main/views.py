@@ -68,16 +68,21 @@ def welcome_view(request):
         else:
             articles = Article.objects.all()
         context = {
+        'query':query,
         'show_navbar': True,
         'articles': articles,
         'categories': categories,
         }
-        return render(request, 'welcome.html', context)
+        return render(request, 'articles.html', context)
     else:
         categories = Article.objects.values_list('category', flat=True).distinct()
+        latest_articles = Article.objects.order_by('-created_date')[:3]
+        latest_article = Article.objects.order_by('-created_date').first()
         articles = Article.objects.all()
         context = {
         'show_navbar': True,
+        'latest_articles': latest_articles,
+        'latest_article': latest_article,
         'articles': articles,
         'categories': categories,
         }

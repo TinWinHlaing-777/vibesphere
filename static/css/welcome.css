@@ -32,7 +32,7 @@
 
 .blog__header,
 .blog__preview {
-  color: #ffffff;
+  color: #1E205A;
   margin: 1rem 2rem;
   width: 80%;
 }
@@ -51,7 +51,7 @@
 
 .read__more {
   text-decoration: underline;
-  color: #a0a0a0;
+  color: #1E205A;
   text-transform: capitalize;
   font-size: 0.8rem;
 }
