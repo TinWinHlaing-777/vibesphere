@@ -38,7 +38,7 @@
                         {% endif %}
                         <div class="article-details">
                             <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
-                            <p class="article__content">{{ article.content|truncatewords:15 }}</p>
+                            <p class="article__content">{{ article.content|truncatewords:10 }}</p>
                             <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
                         </div>
                     </a>
@@ -47,5 +47,5 @@
         {% endif %}
     </div>
 </div>
-<div class="footer">Footer Section</div>
+
 {% endblock %}
