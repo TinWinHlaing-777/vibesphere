@@ -36,46 +36,48 @@
     
   </div>
 
-<div class="bottom__container">
-  <!-- Article List -->
-  <div class="articles-container">
-    {% for article in articles %}
-      <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
-        <div class="article-card">
-          {% if article.article_image %}
-            <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
-          {% else %}
-            <p>No image available</p>
-          {% endif %}
-          <div class="article-details">
-            <h3 class="article__header">{{ article.title|truncatewords:20  }}</h3>
-            <p class="article__content">{{ article.content|truncatewords:50 }}</p>
-            <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+  <div class="bottom__container">
+    <!-- Article List -->
+    <div class="articles-container">
+      {% for article in articles %}
+        <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
+          <div class="article-card">
+            {% if article.article_image %}
+              <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
+            {% else %}
+              <p>No image available</p>
+            {% endif %}
+            <div class="article-details">
+              <h3 class="article__header">{{ article.title|truncatewords:20  }}</h3>
+              <p class="article__content">{{ article.content|truncatewords:50 }}</p>
+              <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+            </div>
           </div>
-        </div>
-      </a>    
-    {% endfor %}    
-    <!-- Repeat .article-item for more articles -->
-  </div>
-
-    <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="filter-category">
-      <h3>FILTER WITH CATEGORIES</h3>
-        <form method="POST">
-          {% csrf_token %}
-            <p>
-              <select name="query" id="query" class="category__list">
-                {% for category in categories %}
-                  <option value="{{category}}" >{{category}}</option>
-                {% endfor %}
-              </select>
-          </p>
-          <input type="submit" value="Search" class="category__search__btn">
-        </form>
+        </a>    
+      {% endfor %}    
+      <!-- Repeat .article-item for more articles -->
     </div>
-  </aside>
-</div>
+
+      <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="filter-category">
+        <h3>FILTER WITH CATEGORIES</h3>
+          <form method="POST">
+            {% csrf_token %}
+              <p>
+                <select name="query" id="query" class="category__list">
+                  {% for category in categories %}
+                    <option value="{{category}}" >{{category}}</option>
+                  {% endfor %}
+                </select>
+            </p>
+            <input type="submit" value="Search" class="category__search__btn">
+          </form>
+      </div>
+    </aside>
+  </div>
 </div>
 {% endblock %}
+
+
 

@@ -111,7 +111,7 @@ def welcome_view(request):
         return render(request, 'articles.html', context)
     else:
         categories = Article.objects.values_list('category', flat=True).distinct()
-        latest_articles = Article.objects.order_by('-created_date')[:6]
+        latest_articles = Article.objects.order_by('-view_count')[:6]
         latest_article = Article.objects.order_by('-created_date').first()
         articles = Article.objects.all()
         context = {
@@ -249,19 +249,36 @@ def create_update_article(request, article_title=None):
     return render(request, 'create_article.html', context)
 
 def show_all_articles(request):
-    articles = Article.objects.all().order_by('-created_date')
-    context = {
-        'show_navbar': True,
-        'articles': articles,
-        'is_by_page': False,
-    }
-    return render(request, 'articles.html', context)
+        if request.method == 'POST':
+            query = request.POST.get('query')
+            categories = Article.objects.values_list('category', flat=True).distinct()
+            
+            if query:  
+                articles = Article.objects.filter(category=query)
+            else:
+                articles = Article.objects.all()
+            context = {
+            'query':query,
+            'show_navbar': True,
+            'articles': articles,
+            'categories': categories,
+            }
+            return render(request, 'articles.html', context)
+        else:
+            categories = Article.objects.values_list('category', flat=True).distinct()
+            articles = Article.objects.all().order_by('-created_date')
+            context = {
+                'show_navbar': True,
+                'articles': articles,
+                'is_by_page': False,
+                'categories': categories,
+            }
+        return render(request, 'articles.html', context)
 
 @login_required
 def read_article(request, id):
-    print(id)
     article = get_object_or_404(Article, title=id)
-    suggested_articles = Article.objects.all()
+    suggested_articles = Article.objects.order_by('-view_count')[:6]
     article.view_count += 1
     article.save(update_fields=['view_count'])
     if request.method == 'POST':

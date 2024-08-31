@@ -65,7 +65,7 @@
     <h1 class="article__list__header">You Recently Created</h1>
     <div class="article__list__container">
       {% for article in articles %}
-        <div class="article__card">
+        <a class="article__card" href="{% url 'read_article' article.title %}" >
             {% if article.article_image %}
               <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__image">
             {% else %}
@@ -77,7 +77,7 @@
             <p class="article__card__span__text">Created By: {{article.author}}</p>
             <p class="article__card__span__text">Published at: {{article.published_date}}</p>
           </div>
-        </div>
+        </a>
       {% endfor %}
     </div>
   </div>

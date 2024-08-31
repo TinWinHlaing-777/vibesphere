@@ -18,7 +18,7 @@
             {% else %}
                 <p>No image available</p>
             {% endif %}
-            <p class="article__text">{{article.view_count}} viewers</p>
+            <p class="article__text__viewer">{{article.view_count}} viewers</p>
             <p class="article__text">{{ article.content }}</p>
             <p class="article__text">Published At: {{ article.published_date }}</p>
         </div>
@@ -69,8 +69,5 @@
         {% endfor %}
     </div>
 </div>
+{% include 'footer.html' %}
 {% endblock %}
-
-    <div class="footer">
-        Footer Session
-    </div>

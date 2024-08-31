@@ -38,6 +38,12 @@
     font-weight: 300;
 }
 
+.article__text__viewer{
+    font-weight: 900;
+    margin: 1rem 0;
+    color: #1E205A;
+}
+
 .comments__section{
     margin-top: 5rem;
 }

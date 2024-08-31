@@ -7,26 +7,52 @@
 
 {% block content %}
 <div class="main__container">
-    <h3 class="page__title"> {{query}} </h3>
+    {% if not is_by_page %}
+    <div class="page__title__container">
+        <h3 class="page__title"> {{query}} </h3>
+        <div class="article__filter">
+            <form method="POST" class="filter__form">
+                {% csrf_token %}
+                <p>
+                    <select name="query" id="query" class="category__list">
+                    {% for category in categories %}
+                        <option value="{{category}}" >{{category}}</option>
+                    {% endfor %}
+                    </select>
+                </p>
+                <input type="submit" value="Search" class="category__search__btn">
+            </form>
+        </div>
+    </div>
+    {% endif %}
     <div class="articles-container">
         {% if is_by_page %}
-            {% for article in articles_by_page %}
-                <div class="article-wrapper">
-                    <a class="article-card" href="{% url 'read_article' article.title %}" style="text-decoration: none;">
-                        {% if article.article_image %}
-                            <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
-                        {% else %}
-                            <p>No image available</p>
-                        {% endif %}
-                        <div class="article-details">
-                            <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
-                            <p class="article__content">{{ article.content|truncatewords:15 }}</p>
-                            <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
-                        </div>
-                    </a>
-                    <a href="{% url 'edit_article' article.title %}" class="edit__article">Edit</a>
+            {% if articles_by_page %}
+                {% for article in articles_by_page %}
+                    <div class="article-wrapper">
+                        <a class="article-card" href="{% url 'read_article' article.title %}" style="text-decoration: none;">
+                            {% if article.article_image %}
+                                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                            <div class="article-details">
+                                <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
+                                <p class="article__content">{{ article.content|truncatewords:15 }}</p>
+                                <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+                            </div>
+                        </a>
+                        {% if article.author == request.user %}
+                            <a href="{% url 'edit_article' article.title %}" class="edit__article">Edit</a>
+                        {% endif %}                
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no__arcticles__container">
+                    <p class="no__article__text">This page has no articles to display.</p>
+                    <a class="no__article__link" href="{% url 'pages' %}">Click me to bring Back..</a>
                 </div>
-            {% endfor %}
+            {% endif %}
         {% else %}
             {% for article in articles %}
                 <div class="article-wrapper">

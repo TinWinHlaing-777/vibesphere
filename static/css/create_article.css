@@ -29,12 +29,14 @@
 
 .article__card{
     background-color: #fff;
+    color: #1E205A;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: 10px;
+    text-decoration: none;
 }
 
 .article__image{

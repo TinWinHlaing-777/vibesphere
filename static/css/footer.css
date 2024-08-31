@@ -1,10 +1,11 @@
 .footer__container {
-    width: 100%;
-    background-color: #e1e1e1;
-    color: #1E205A;
-    text-align: center;
-    padding: 1rem 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
+  margin-top: auto; /* Push the footer to the bottom */
+  width: 100%;
+  background-color: #e1e1e1;
+  color: #1E205A;
+  text-align: center;
+  padding: 1rem 0;
+  bottom: 0;
+  left: 0;
+  position: fixed;
 }
