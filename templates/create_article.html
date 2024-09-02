@@ -41,20 +41,8 @@
             {{ form.content}}
         </div>
         <div class="form__group">
-            <label class="form__label" for="id_text">Published Date</label>
-            {{ form.published_date}}
-        </div>
-        <div class="form__group">
-            <label class="form__label" for="id_text">Allow to Comment</label>
-            {{ form.allow_to_comment}}
-        </div>
-        <div class="form__group">
             <label class="form__label" for="id_text">Category</label>
             {{ form.category}}
-        </div>
-        <div class="form__group">
-            <label class="form__label" for="id_text">Tag</label>
-            {{ form.tag}}
         </div>
         <button type="submit" class="save__btn">Save Article</button>
         <button type="submit" name="delete" value="true" class="delete__btn" onclick="return confirm('Are you sure you want to delete this page?');">Delete Article</button>

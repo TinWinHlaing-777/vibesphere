@@ -186,6 +186,7 @@ def update_page(request, title):
         return redirect('create_page')
     if request.method == 'POST':
         if 'delete_page' in request.POST:
+            page.articles.all().delete()
             page.delete()
             messages.success(request, 'Page deleted successfully.')
             return redirect('pages') 
@@ -232,7 +233,7 @@ def create_update_article(request, article_title=None):
             # Check for prohibited content
             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
                 messages.error(request, "Your content contains prohibited words or phrases and cannot be published.")
-                return redirect('create_page')  # Adjust if needed
+                return redirect('create')  # Adjust if needed
             blog_page = form.save(commit=False)  
             blog_page.author = request.user  
             blog_page.save()  

@@ -72,14 +72,12 @@ class BlogPageForm(forms.ModelForm):
             'title',
             'profile_image',
             'meta_description',
-            'published_date',
             'status',
         ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form__input'}),
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
             'meta_description': forms.Textarea(attrs={'class': 'form__input', 'placeholder': 'Describe the aim and purpose of creating this page in a few words.'}),
-            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local','class': 'form__input'}),
             'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')], attrs={'class': 'form__input'}),
         }
 
@@ -93,19 +91,13 @@ class ArticleForm(forms.ModelForm):
             'page_name',
             'article_image',
             'content',
-            'published_date',
-            'allow_to_comment',
             'category',
-            'tag'
         ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form__input'}),
             'article_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
             'content': forms.Textarea(attrs={'class': 'form__input'}),
-            'published_date': forms.DateTimeInput(attrs={'class': 'form__input', 'type': 'datetime-local'}),
-            'allow_to_comment': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'category': forms.Select(attrs={'class': 'form__input'}),
-            'tag': forms.Select(attrs={'class': 'form__input'}),
         }
 
     def clean_page_name(self):

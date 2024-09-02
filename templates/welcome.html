@@ -43,7 +43,7 @@
         <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
           <div class="article-card">
             {% if article.article_image %}
-              <img src="{{article.article_image.url}}" alt="{{article.title}}" class="article__img">
+              <img src="{{article.article_image.url}}" alt="{{article.title}}" class="main__article__img">
             {% else %}
               <p>No image available</p>
             {% endif %}

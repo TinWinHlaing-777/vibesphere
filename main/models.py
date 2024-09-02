@@ -95,50 +95,14 @@ CATEGORY_CHOICES = [
         ('Parenting Tips', 'Parenting Tips'),
         ('Family Activities', 'Family Activities'),
     ]
-TAG_CHOICES = [
-        ('Technology', 'Technology'),
-        ('Gadgets', 'Gadgets'),
-        ('Software', 'Software'),
-        ('AI', 'AI'),
-        ('Startups', 'Startups'),
-        ('Health', 'Health'),
-        ('Fitness', 'Fitness'),
-        ('Travel', 'Travel'),
-        ('Food', 'Food'),
-        ('Fashion', 'Fashion'),
-        ('Entertainment', 'Entertainment'),
-        ('Movies', 'Movies'),
-        ('Music', 'Music'),
-        ('Sports', 'Sports'),
-        ('Finance', 'Finance'),
-        ('Economy', 'Economy'),
-        ('Business', 'Business'),
-        ('Science', 'Science'),
-        ('Space', 'Space'),
-        ('Physics', 'Physics'),
-        ('Biology', 'Biology'),
-        ('Environment', 'Environment'),
-        ('Art', 'Art'),
-        ('History', 'History'),
-        ('Philosophy', 'Philosophy'),
-        ('Education', 'Education'),
-        ('Career', 'Career'),
-        ('Politics', 'Politics'),
-        ('Opinion', 'Opinion'),
-        ('Automotive', 'Automotive'),
-        ('Home', 'Home'),
-        ('Parenting', 'Parenting'),
-        ('Gaming', 'Gaming'),
-        ('Religion', 'Religion'),
-    ]
 class BlogPage(models.Model):
     title = models.CharField(primary_key=True, unique=True, max_length=200)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    profile_image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    profile_image = models.ImageField(upload_to='blog_images/')
     meta_description = models.TextField(blank=True, null=True)
-    published_date = models.DateTimeField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     status = models.CharField(max_length=10, choices=[('draft', 'Pending'), ('published', 'Published')], default='draft')
 
     def save(self, *args, **kwargs):
@@ -149,17 +113,16 @@ class BlogPage(models.Model):
     
 class Article(models.Model):
     title = models.CharField(primary_key=True, unique=True, max_length=200)
-    page_name = models.ForeignKey(BlogPage, on_delete=models.CASCADE)
+    page_name = models.ForeignKey(BlogPage, on_delete=models.CASCADE, related_name='articles')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    article_image = models.ImageField(upload_to='article_images/', blank=True, null=True)
+    article_image = models.ImageField(upload_to='article_images/')
     content = models.TextField()
-    published_date = models.DateTimeField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     allow_to_comment = models.BooleanField(default=True)
     view_count = models.IntegerField(default=0)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
-    tag = models.CharField(max_length=50, choices=TAG_CHOICES)
 
     def __str__(self):
         return self.title
