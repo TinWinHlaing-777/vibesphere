@@ -109,7 +109,7 @@
 
 .card__text{
   font-size: .8rem;
-  font-weight: 200;
+  font-weight: 400;
   color: #1E205A;
 }
 
@@ -133,12 +133,11 @@ hr{
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  position: re;
 }
 
 /* Article list styles */
 .articles-container {
-  width: 65%;
+  width: 70%;
   height: 80vh;
   display: flex;
   gap: 20px;
@@ -155,7 +154,7 @@ hr{
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); */
 }
 
 .article-card:hover{
@@ -187,7 +186,7 @@ hr{
 }
 .article-details p{
   font-size: .7rem;
-  font-weight: 200;
+  font-weight: 400;
   color: #1E205A;
   margin-left: 2rem;
 }

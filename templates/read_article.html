@@ -39,7 +39,7 @@
             {% for comment in article.comments.all %}
                 <div class="comment__container">
                     <div class="comment__detail">
-                        <p class="comment__text"><strong>{{ comment.user }}</strong> suggested:</p>
+                        <p class="comment__text"><strong>{{ comment.author }}</strong> suggested:</p>
                         <p class="main__comment">{{ comment.content }}</p>
                     </div>
                     <p class="comment__date">{{ comment.created_date }}</p>
