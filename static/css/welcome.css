@@ -2,7 +2,7 @@
   width: 90%;
   height: auto;
   margin: auto;
-  padding-bottom: 10rem;
+  padding-bottom: 40rem;
 }
 
 .main__container {
@@ -108,7 +108,7 @@
 }
 
 .card__text{
-  font-size: .7rem;
+  font-size: .8rem;
   font-weight: 200;
   color: #1E205A;
 }

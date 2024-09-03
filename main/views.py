@@ -287,7 +287,7 @@ def read_article(request, id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.article = article
-            comment.user = request.user
+            comment.author = request.user
             comment.save()
             return redirect('read_article', id=id)
     else:
