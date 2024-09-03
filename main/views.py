@@ -139,20 +139,30 @@ def blog_page_create(request):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
+
     if request.method == 'POST':
         form = BlogPageForm(request.POST, request.FILES)
         if form.is_valid():
+            content = form.cleaned_data.get('meta_description', '')
+
+            # Check for prohibited content
+            if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
+                messages.error(request, "Your description contains prohibited words or phrases and cannot be published.")
+                return redirect('create_page')  # Ensure 'create_page' URL exists and is correct
+
             blog_page = form.save(commit=False)
             blog_page.author = request.user
             blog_page.save()             
-            return redirect('pages')
+            return redirect('pages')  # Ensure 'pages' URL exists and is correct
     else:
         form = BlogPageForm()
+
     context = {
         'show_navbar': True,
         'form': form
-        }
+    }
     return render(request, 'page_form.html', context)
+
 
 @login_required
 def manage_page(request, user_id=None):
@@ -233,7 +243,7 @@ def create_update_article(request, article_title=None):
             # Check for prohibited content
             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
                 messages.error(request, "Your content contains prohibited words or phrases and cannot be published.")
-                return redirect('create')  # Adjust if needed
+                return redirect('create') 
             blog_page = form.save(commit=False)  
             blog_page.author = request.user  
             blog_page.save()  

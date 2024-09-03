@@ -2,7 +2,7 @@
   width: 90%;
   height: auto;
   margin: auto;
-  padding-bottom: 40rem;
+  padding-bottom: 5rem;
 }
 
 .main__container {
@@ -133,6 +133,7 @@ hr{
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+  margin-bottom: 5rem;
 }
 
 /* Article list styles */
@@ -190,6 +191,15 @@ hr{
   color: #1E205A;
   margin-left: 2rem;
 }
+
+.article__content{
+  margin-top: .8rem;
+}
+
+.article__count{
+  margin-top: 1rem;
+}
+
 /* Sidebar styles */
 .sidebar {
   width: 30%;

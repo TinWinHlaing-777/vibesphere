@@ -9,6 +9,13 @@
         <div class="left__container">
             <h1 class="form__header">Create a page to share your vibes.</h1>
             <form method="post" enctype="multipart/form-data" class="form">
+                {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% csrf_token %}
                 <div class="form__group">
                     <label class="form__label" for="id_title">Title</label>
