@@ -18,7 +18,7 @@ urlpatterns = [
     
     # Page paths
     path('pages/', views.show_all_pages, name='pages'),
-    path('page/new', views.blog_page_create, name="create_page"),
+    path('page/new', views.create_update_blog_page, name="create_page"),
     path('page/manage/<int:user_id>/', views.manage_page, name="manage_page"),
-    path('page/update/<str:title>/', views.update_page, name="update_page"),
+    path('page/update/<str:title>/', views.create_update_blog_page, name="update_page"),
 ]

@@ -134,34 +134,88 @@ def show_all_pages(request):
     return render(request, 'pages.html', context)
 
 
+# @login_required
+# def blog_page_create(request):
+#     redirect_response = redirect_if_not_logged_in(request)
+#     if redirect_response:
+#         return redirect_response
+
+#     if request.method == 'POST':
+#         form = BlogPageForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             content = form.cleaned_data.get('meta_description', '')
+
+#             # Check for prohibited content
+#             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
+#                 messages.error(request, "Your description contains prohibited words or phrases and cannot be published.")
+#                 return redirect('create_page')  # Ensure 'create_page' URL exists and is correct
+
+#             blog_page = form.save(commit=False)
+#             blog_page.author = request.user
+#             blog_page.save()             
+#             return redirect('pages')  # Ensure 'pages' URL exists and is correct
+#     else:
+#         form = BlogPageForm()
+
+#     context = {
+#         'show_navbar': True,
+#         'form': form
+#     }
+#     return render(request, 'page_form.html', context)
+
 @login_required
-def blog_page_create(request):
+def create_update_blog_page(request, title=None):
+    # Redirect if the user is not logged in
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
 
+    # Determine if we are editing an existing page or creating a new one
+    if title:
+        page = get_object_or_404(BlogPage, title__iexact=title.lower(), author=request.user)
+        is_editing = True
+    else:
+        page = None
+        is_editing = False
+
     if request.method == 'POST':
-        form = BlogPageForm(request.POST, request.FILES)
+        form = BlogPageForm(request.POST, request.FILES, instance=page, is_editing=is_editing)
         if form.is_valid():
-            content = form.cleaned_data.get('meta_description', '')
+            new_title = form.cleaned_data['title']
 
             # Check for prohibited content
+            content = form.cleaned_data.get('meta_description', '')
             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
                 messages.error(request, "Your description contains prohibited words or phrases and cannot be published.")
-                return redirect('create_page')  # Ensure 'create_page' URL exists and is correct
+                return redirect('create_page', title=page.title if page else None)
 
+            # Handle title change without creating a new page
+            if is_editing and new_title.lower() != page.title.lower():
+                if BlogPage.objects.filter(title__iexact=new_title.lower()).exists():
+                    messages.error(request, 'A page with this title already exists.')
+                    return redirect('create_page', title=page.title)
+                page.title = new_title
+
+            # Save the page
             blog_page = form.save(commit=False)
-            blog_page.author = request.user
-            blog_page.save()             
-            return redirect('pages')  # Ensure 'pages' URL exists and is correct
+            if not is_editing:
+                blog_page.author = request.user  # Set the author only if creating a new page
+            blog_page.save()
+
+            messages.success(request, 'Page updated successfully.' if is_editing else 'Page created successfully.')
+            return redirect('pages')
+
     else:
-        form = BlogPageForm()
+        form = BlogPageForm(instance=page, is_editing=is_editing)
 
     context = {
         'show_navbar': True,
-        'form': form
+        'form': form,
+        'page': page,
+        'is_editing': is_editing,
     }
     return render(request, 'page_form.html', context)
+
 
 
 @login_required
@@ -185,38 +239,72 @@ def manage_page(request, user_id=None):
         messages.info(request, 'You do not have a page. Please create a new page.')
         return redirect('create_page')
     
-@login_required
-def update_page(request, title):
-    redirect_response = redirect_if_not_logged_in(request)
-    if redirect_response:
-        return redirect_response
-    page = get_object_or_404(BlogPage, title__iexact=title.lower())
-    if page.author != request.user:
-        messages.error(request, 'You do not have permission to edit this page.')
-        return redirect('create_page')
-    if request.method == 'POST':
-        if 'delete_page' in request.POST:
-            page.articles.all().delete()
-            page.delete()
-            messages.success(request, 'Page deleted successfully.')
-            return redirect('pages') 
-        else:
-            form = BlogPageForm(request.POST, request.FILES, instance=page)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Page updated successfully.')
-                return redirect('pages')  
-    else:
-        form = BlogPageForm(instance=page)
-    context = {
-        'show_navbar': True,
-        'form': form,
-        'page': page
-    }
-    return render(request, 'page_form.html', context)
+# @login_required
+# def update_page(request, title):
+#     redirect_response = redirect_if_not_logged_in(request)
+#     if redirect_response:
+#         return redirect_response
+
+#     # Fetch the existing BlogPage instance
+#     page = get_object_or_404(BlogPage, title__iexact=title.lower())
+
+#     if page.author != request.user:
+#         messages.error(request, 'You do not have permission to edit this page.')
+#         return redirect('create_page')
+
+#     if request.method == 'POST':
+#         form = BlogPageForm(request.POST, request.FILES, instance=page)
+#         if form.is_valid():
+#             new_title = form.cleaned_data['title']
+
+#             # If title has changed, handle the update manually
+#             if new_title.lower() != page.title.lower():
+#                 # Check if a page with the new title already exists
+#                 if BlogPage.objects.filter(title__iexact=new_title.lower()).exists():
+#                     messages.error(request, 'A page with this title already exists.')
+#                     return redirect('update_page', title=page.title)
+
+#                 # Update other fields first
+#                 form.save(commit=False)
+
+#                 # Delete the current page to avoid primary key conflict
+#                 page.delete()
+
+#                 # Create a new instance with the updated title but the same data
+#                 new_page = BlogPage.objects.create(
+#                     title=new_title,
+#                     author=request.user,
+#                     profile_image=form.cleaned_data['profile_image'],
+#                     meta_description=form.cleaned_data['meta_description'],
+#                     status=form.cleaned_data['status'],
+#                     created_date=page.created_date,  # Preserve original created date
+#                     published_date=page.published_date,  # Preserve published date
+#                 )
+
+#                 messages.success(request, 'Page updated successfully.')
+#                 return redirect('pages')
+
+#             else:
+#                 # If the title hasn't changed, simply save the form
+#                 form.save()
+#                 messages.success(request, 'Page updated successfully.')
+#                 return redirect('pages')
+
+#     else:
+#         form = BlogPageForm(instance=page)
+
+#     context = {
+#         'show_navbar': True,
+#         'form': form,
+#         'page': page
+#     }
+#     return render(request, 'page_form.html', context)
+
+
     
 @login_required
 def create_update_article(request, article_title=None):
+    # Redirect if the user is not logged in
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
@@ -225,7 +313,6 @@ def create_update_article(request, article_title=None):
     if not blog_pages.exists():
         return redirect('create_page') 
 
-    articles = Article.objects.filter(page_name__in=blog_pages)
     if article_title:
         article = get_object_or_404(Article, title=article_title, page_name__in=blog_pages)
         is_editing = True
@@ -240,7 +327,7 @@ def create_update_article(request, article_title=None):
                 article.delete()
             return redirect('show_all_articles')
         
-        form = ArticleForm(request.POST, request.FILES, instance=article, user=request.user)
+        form = ArticleForm(request.POST, request.FILES, instance=article, user=request.user, is_editing=is_editing)
         if form.is_valid():
             content = form.cleaned_data.get('content', '')
 
@@ -250,20 +337,21 @@ def create_update_article(request, article_title=None):
                 return redirect('create') 
             
             article = form.save(commit=False)
-            article.author = request.user  
-            article.save()  
+            article.author = request.user  # Set the author
+            article.save()  # Save the article
             return redirect('show_all_articles')
     else:
-        form = ArticleForm(instance=article, user=request.user)
+        form = ArticleForm(instance=article, user=request.user, is_editing=is_editing)
     
     context = {
         'show_navbar': True,
         'form': form,
-        'articles': articles,
+        'articles': Article.objects.filter(page_name__in=blog_pages),
         'is_editing': is_editing,
         'article': article,
     }
     return render(request, 'create_article.html', context)
+
 
 
 def show_all_articles(request):

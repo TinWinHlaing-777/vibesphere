@@ -50,6 +50,10 @@
     font-family: "Montserrat", sans-serif;
 }
 
+.form__input--readonly {
+    display: none !important;
+}
+
 .save__btn, .delete__btn{
     width: 100%;
     height: 20%;

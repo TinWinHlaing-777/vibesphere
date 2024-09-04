@@ -66,6 +66,15 @@ class CustomLoginForm(AuthenticationForm):
     )
 
 class BlogPageForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        is_editing = kwargs.pop('is_editing', False)
+        super(BlogPageForm, self).__init__(*args, **kwargs)
+
+        # If the form is in edit mode, make the title field read-only
+        if is_editing:
+            self.fields['title'].widget.attrs['readonly'] = True
+            self.fields['title'].widget.attrs['class'] += ' form__input--readonly'
+
     class Meta:
         model = BlogPage
         fields = [
@@ -83,10 +92,28 @@ class BlogPageForm(forms.ModelForm):
 
 class ArticleForm(forms.ModelForm):
     page_name = forms.ModelChoiceField(
-        queryset=BlogPage.objects.none(),  # This will be updated in the form's __init__ method
-        label='Page Name',
+        queryset=BlogPage.objects.none(), 
         widget=forms.Select(attrs={'class': 'form__input'})
     )
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the user from kwargs
+        is_editing = kwargs.pop('is_editing', False)
+        super().__init__(*args, **kwargs)
+        
+        if user:
+            self.fields['page_name'].queryset = BlogPage.objects.filter(author=user)
+
+        # If the form is in edit mode, make the title field read-only
+        if is_editing:
+            self.fields['title'].widget.attrs['readonly'] = True
+            self.fields['title'].widget.attrs['class'] += ' form__input--readonly'
+
+    def clean_page_name(self):
+        page_name = self.cleaned_data.get('page_name')
+        if not page_name:
+            raise forms.ValidationError("Page name is required.")
+        return page_name
 
     class Meta:
         model = Article
@@ -104,17 +131,6 @@ class ArticleForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form__input'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)  # Get the user from kwargs
-        super().__init__(*args, **kwargs)
-        if user:
-            self.fields['page_name'].queryset = BlogPage.objects.filter(author=user)
-
-    def clean_page_name(self):
-        page_name = self.cleaned_data.get('page_name')
-        if not page_name:
-            raise forms.ValidationError("Page name is required.")
-        return page_name
 
 class CommentForm(forms.ModelForm):
     class Meta:
