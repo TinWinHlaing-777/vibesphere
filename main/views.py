@@ -111,7 +111,7 @@ def welcome_view(request):
         return render(request, 'articles.html', context)
     else:
         categories = Article.objects.values_list('category', flat=True).distinct()
-        latest_articles = Article.objects.order_by('-view_count')[:6]
+        latest_articles = Article.objects.order_by('-view_count')[:5]
         latest_article = Article.objects.order_by('-created_date').first()
         articles = Article.objects.all()
         context = {
