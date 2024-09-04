@@ -75,7 +75,7 @@ class BlogPageForm(forms.ModelForm):
             'status',
         ]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form__input'}),
+            'title': forms.TextInput(attrs={'class': 'form__input', 'readonly': 'readonly'}),
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
             'meta_description': forms.Textarea(attrs={'class': 'form__input', 'placeholder': 'Describe the aim and purpose of creating this page in a few words.'}),
             'status': forms.Select(choices=[('draft', 'Draft'), ('published', 'Published')], attrs={'class': 'form__input'}),
@@ -98,7 +98,7 @@ class ArticleForm(forms.ModelForm):
             'category',
         ]
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form__input'}),
+            'title': forms.TextInput(attrs={'class': 'form__input', 'readonly': 'readonly'}),
             'article_image': forms.ClearableFileInput(attrs={'class': 'form__input'}),
             'content': forms.Textarea(attrs={'class': 'form__input'}),
             'category': forms.Select(attrs={'class': 'form__input'}),
