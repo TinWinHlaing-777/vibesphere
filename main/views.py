@@ -220,9 +220,11 @@ def create_update_article(request, article_title=None):
     redirect_response = redirect_if_not_logged_in(request)
     if redirect_response:
         return redirect_response
+
     blog_pages = BlogPage.objects.filter(author=request.user)
     if not blog_pages.exists():
         return redirect('create_page') 
+
     articles = Article.objects.filter(page_name__in=blog_pages)
     if article_title:
         article = get_object_or_404(Article, title=article_title, page_name__in=blog_pages)
@@ -230,13 +232,15 @@ def create_update_article(request, article_title=None):
     else:
         article = None
         is_editing = False
+
     if request.method == 'POST':
         if 'delete' in request.POST:
             # Handle deletion
             if article:
                 article.delete()
             return redirect('show_all_articles')
-        form = ArticleForm(request.POST, request.FILES, instance=article)
+        
+        form = ArticleForm(request.POST, request.FILES, instance=article, user=request.user)
         if form.is_valid():
             content = form.cleaned_data.get('content', '')
 
@@ -244,12 +248,14 @@ def create_update_article(request, article_title=None):
             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
                 messages.error(request, "Your content contains prohibited words or phrases and cannot be published.")
                 return redirect('create') 
-            blog_page = form.save(commit=False)  
-            blog_page.author = request.user  
-            blog_page.save()  
+            
+            article = form.save(commit=False)
+            article.author = request.user  
+            article.save()  
             return redirect('show_all_articles')
     else:
-        form = ArticleForm(instance=article)
+        form = ArticleForm(instance=article, user=request.user)
+    
     context = {
         'show_navbar': True,
         'form': form,
@@ -258,6 +264,7 @@ def create_update_article(request, article_title=None):
         'article': article,
     }
     return render(request, 'create_article.html', context)
+
 
 def show_all_articles(request):
         if request.method == 'POST':

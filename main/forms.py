@@ -82,7 +82,11 @@ class BlogPageForm(forms.ModelForm):
         }
 
 class ArticleForm(forms.ModelForm):
-    page_name = forms.CharField(label='Page Name', max_length=200, widget=forms.TextInput(attrs={'class': 'form__input'}))
+    page_name = forms.ModelChoiceField(
+        queryset=BlogPage.objects.none(),  # This will be updated in the form's __init__ method
+        label='Page Name',
+        widget=forms.Select(attrs={'class': 'form__input'})
+    )
 
     class Meta:
         model = Article
@@ -100,13 +104,17 @@ class ArticleForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form__input'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the user from kwargs
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['page_name'].queryset = BlogPage.objects.filter(author=user)
+
     def clean_page_name(self):
         page_name = self.cleaned_data.get('page_name')
-        try:
-            blog_page = BlogPage.objects.get(title=page_name)
-        except BlogPage.DoesNotExist:
-            raise forms.ValidationError(f"BlogPage with title '{page_name}' does not exist.")
-        return blog_page 
+        if not page_name:
+            raise forms.ValidationError("Page name is required.")
+        return page_name
 
 class CommentForm(forms.ModelForm):
     class Meta:
