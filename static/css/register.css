@@ -70,3 +70,50 @@
     font-weight: 700;
 }
 
+@media screen and (max-width: 768px) {
+    .reg__form {
+        width: 90%;
+        padding: 2rem;
+    }
+
+    .app__logo {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    .reg__form__header {
+        font-size: 1.5rem;
+    }
+
+    .reg__input {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .submit__btn {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .append__text,
+    .append__link {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .reg__form {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .app__logo {
+        width: 6rem;
+        height: 6rem;
+    }
+
+    .reg__form__header {
+        font-size: 1.2rem;
+    }
+}
+

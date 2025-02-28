@@ -1,127 +1,203 @@
 .page__form__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 90%;
-    margin: auto;
-    margin-top: 2%;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  margin: auto;
+  margin-top: 2%;
 }
 
-.left__container{
-    width: 65%;
+.left__container {
+  width: 65%;
 }
 
-.form__header{
-    color: #1E205A;
-    text-transform: uppercase;
-    font-size: 2rem;
-    font-weight: 900;
+.form__header {
+  color: #1e205a;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 900;
 }
 
-.form{
-    width: 100%;
-    height: auto;
-    margin-top: 3rem;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
+.form {
+  width: 100%;
+  height: auto;
+  margin-top: 3rem;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
 }
 
-.form__group{
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
+.form__group {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
-.form__label{
-    margin-bottom: .5rem;
+.form__label {
+  margin-bottom: 0.5rem;
 }
 
-.form__input{
-    background-color: transparent;
-    border: none;
-    border: 1px solid #1E205A;
-    padding: .8rem .5rem;
-    margin-bottom: 1rem;
-    width: 100%;
-    border-radius: 5px;
-    font-family: "Montserrat", sans-serif;
+.form__input {
+  background-color: transparent;
+  border: none;
+  border: 1px solid #1e205a;
+  padding: 0.8rem 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  font-family: "Montserrat", sans-serif;
 }
 
 .form__input--readonly {
-    display: none !important;
+  display: none !important;
 }
 
-.save__btn, .delete__btn{
-    width: 100%;
-    height: 20%;
-    margin-top: 1rem;
-    padding: 1rem;
-    border: none;
-    border-radius: .5rem;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 300;
-    color: #ffffff;
+.save__btn,
+.delete__btn {
+  width: 100%;
+  height: 20%;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #ffffff;
 }
 
-.save__btn{
-    background-color: #000000;
+.save__btn {
+  background-color: #000000;
 }
 
 .save__btn:hover {
-    transition: 0.3s ease all;
-    background-color: #242424;
+  transition: 0.3s ease all;
+  background-color: #242424;
 }
 
-.delete__btn{
-    background-color: red;
+.delete__btn {
+  background-color: red;
 }
 
-.right__container{
-    width: 30%;
-    background-color: #ffffff;
-    height: auto;
-    margin-top: 7%;
-    border-radius: 10px;
+.right__container {
+  width: 30%;
+  background-color: #ffffff;
+  height: auto;
+  margin-top: 7%;
+  border-radius: 10px;
 }
 
-.page__image{
+.page__image {
+  width: 100%;
+  height: 200px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.page__info__container {
+  padding: 1rem;
+}
+
+.page__title {
+  color: #1e205a;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.page__body {
+  font-size: 0.8rem;
+  font-weight: 300;
+  margin-top: 1rem;
+}
+
+.manage__btn {
+  text-decoration: none;
+  width: 100%;
+  margin: auto;
+  background-color: #000000;
+  text-align: center;
+  color: #ffffff;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Media Queries for Responsive Design */
+
+/* For tablets */
+@media (max-width: 768px) {
+  .page__form__container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left__container,
+  .right__container {
     width: 100%;
-    height: 200px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
+  }
 
-.page__info__container{
+  .right__container {
+    margin-top: 2rem;
+  }
+
+  .form__header {
+    font-size: 1.5rem;
+  }
+
+  .form {
     padding: 1rem;
-}
+  }
 
-.page__title{
-    color: #1E205A;
-    font-weight: 600;
-    margin-top: 1rem;
-
-}
-
-.page__body{
-    font-size: .8rem;
-    font-weight: 300;
-    margin-top: 1rem;
-}
-
-.manage__btn{
-    text-decoration: none;
-    width: 100%;
-    margin: auto;
-    background-color: #000000;
-    text-align: center;
-    color: #ffffff;
-    margin-top: 1rem;
-    padding: .5rem;
+  .save__btn,
+  .delete__btn {
     font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 0.8rem;
+  }
+
+  .page__image {
+    width: 100%;
+    height: 20%;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .page__form__container {
+    width: 95%;
+  }
+
+  .form__header {
+    font-size: 1.2rem;
+  }
+
+  .form {
+    padding: 0.5rem;
+  }
+
+  .save__btn,
+  .delete__btn {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .page__image {
+    width: 100%;
+    height: 20%;
+  }
+
+  .page__title {
+    font-size: 1rem;
+  }
+
+  .page__body {
+    font-size: 0.7rem;
+  }
+
+  .manage__btn {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
 }

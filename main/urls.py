@@ -14,6 +14,8 @@ urlpatterns = [
     path('article/<str:article_title>/edit/', views.create_update_article, name='edit_article'),
     path('articles/<str:id>/', views.read_article, name="read_article"),
     path('articles/', views.show_all_articles, name="show_all_articles"),
+    path('like/<str:article_title>/', views.like_article, name='like_article'),
+    path('increment-share-count/<str:article_title>/', views.increment_share_count, name='increment_share_count'),
 
     
     # Page paths

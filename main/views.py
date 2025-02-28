@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm, CustomLoginForm, BlogPageForm, ArticleForm, CommentForm
@@ -39,7 +40,6 @@ PROHIBITED_KEYWORDS = [
     'racial profiling', 'exclusionary practices', 'aggressive proselytizing',
     'manipulation', 'hostile work environment', 'unfair treatment'
 ]
-
 
 # Create Account Function
 def register_view(request):
@@ -123,8 +123,7 @@ def welcome_view(request):
         }
     return render(request, 'welcome.html', context)
 
- 
-    
+
 def show_all_pages(request):
     pages = BlogPage.objects.all()
     context = {
@@ -132,36 +131,6 @@ def show_all_pages(request):
         'pages': pages
     }
     return render(request, 'pages.html', context)
-
-
-# @login_required
-# def blog_page_create(request):
-#     redirect_response = redirect_if_not_logged_in(request)
-#     if redirect_response:
-#         return redirect_response
-
-#     if request.method == 'POST':
-#         form = BlogPageForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             content = form.cleaned_data.get('meta_description', '')
-
-#             # Check for prohibited content
-#             if any(keyword.lower() in content.lower() for keyword in PROHIBITED_KEYWORDS):
-#                 messages.error(request, "Your description contains prohibited words or phrases and cannot be published.")
-#                 return redirect('create_page')  # Ensure 'create_page' URL exists and is correct
-
-#             blog_page = form.save(commit=False)
-#             blog_page.author = request.user
-#             blog_page.save()             
-#             return redirect('pages')  # Ensure 'pages' URL exists and is correct
-#     else:
-#         form = BlogPageForm()
-
-#     context = {
-#         'show_navbar': True,
-#         'form': form
-#     }
-#     return render(request, 'page_form.html', context)
 
 @login_required
 def create_update_blog_page(request, title=None):
@@ -216,8 +185,6 @@ def create_update_blog_page(request, title=None):
     }
     return render(request, 'page_form.html', context)
 
-
-
 @login_required
 def manage_page(request, user_id=None):
     redirect_response = redirect_if_not_logged_in(request)
@@ -238,69 +205,6 @@ def manage_page(request, user_id=None):
     else:
         messages.info(request, 'You do not have a page. Please create a new page.')
         return redirect('create_page')
-    
-# @login_required
-# def update_page(request, title):
-#     redirect_response = redirect_if_not_logged_in(request)
-#     if redirect_response:
-#         return redirect_response
-
-#     # Fetch the existing BlogPage instance
-#     page = get_object_or_404(BlogPage, title__iexact=title.lower())
-
-#     if page.author != request.user:
-#         messages.error(request, 'You do not have permission to edit this page.')
-#         return redirect('create_page')
-
-#     if request.method == 'POST':
-#         form = BlogPageForm(request.POST, request.FILES, instance=page)
-#         if form.is_valid():
-#             new_title = form.cleaned_data['title']
-
-#             # If title has changed, handle the update manually
-#             if new_title.lower() != page.title.lower():
-#                 # Check if a page with the new title already exists
-#                 if BlogPage.objects.filter(title__iexact=new_title.lower()).exists():
-#                     messages.error(request, 'A page with this title already exists.')
-#                     return redirect('update_page', title=page.title)
-
-#                 # Update other fields first
-#                 form.save(commit=False)
-
-#                 # Delete the current page to avoid primary key conflict
-#                 page.delete()
-
-#                 # Create a new instance with the updated title but the same data
-#                 new_page = BlogPage.objects.create(
-#                     title=new_title,
-#                     author=request.user,
-#                     profile_image=form.cleaned_data['profile_image'],
-#                     meta_description=form.cleaned_data['meta_description'],
-#                     status=form.cleaned_data['status'],
-#                     created_date=page.created_date,  # Preserve original created date
-#                     published_date=page.published_date,  # Preserve published date
-#                 )
-
-#                 messages.success(request, 'Page updated successfully.')
-#                 return redirect('pages')
-
-#             else:
-#                 # If the title hasn't changed, simply save the form
-#                 form.save()
-#                 messages.success(request, 'Page updated successfully.')
-#                 return redirect('pages')
-
-#     else:
-#         form = BlogPageForm(instance=page)
-
-#     context = {
-#         'show_navbar': True,
-#         'form': form,
-#         'page': page
-#     }
-#     return render(request, 'page_form.html', context)
-
-
     
 @login_required
 def create_update_article(request, article_title=None):
@@ -405,6 +309,21 @@ def read_article(request, id):
     }
     return render(request, 'read_article.html', context)
 
+@login_required
+def like_article(request, article_title):
+    article = get_object_or_404(Article, title=article_title)
+    if request.user in article.likes.all():
+        article.likes.remove(request.user)
+    else:
+        article.likes.add(request.user)
+    return redirect('read_article', id=article.title)
+
+@login_required
+def increment_share_count(request, article_title):
+    article = get_object_or_404(Article, title=article_title)
+    article.share_count += 1
+    article.save()
+    return JsonResponse({'share_count': article.share_count})
 
 @login_required
 def articles_by_page(request, page_name):
@@ -418,9 +337,3 @@ def articles_by_page(request, page_name):
         'is_by_page': True,
     }
     return render(request, 'articles.html', context)
-
-
-
-
-
-

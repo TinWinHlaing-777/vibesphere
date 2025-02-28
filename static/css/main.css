@@ -10,4 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 10rem;
+  margin-top: 12vh; /* Same as navbar height */
+  padding: 0;
+  box-sizing: border-box;
 }

@@ -9,7 +9,11 @@
 <div class="main__container">
     {% if not is_by_page %}
     <div class="page__title__container">
-        <h3 class="page__title"> {{query}} </h3>
+        {% if query %}
+            <h3 class="page__title"> {{query}} </h3>
+        {% else %}
+            <h3 class="page__title">All&nbsp; Articles</h3>
+        {% endif %}
         <div class="article__filter">
             <form method="POST" class="filter__form">
                 {% csrf_token %}
@@ -38,7 +42,7 @@
                             {% endif %}
                             <div class="article-details">
                                 <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
-                                <p class="article__content">{{ article.content|truncatewords:15 }}</p>
+                                <p class="article__content">{{ article.content|truncatewords:30 }}</p>
                                 <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
                             </div>
                         </a>
@@ -64,7 +68,7 @@
                         {% endif %}
                         <div class="article-details">
                             <h3 class="article__header">{{ article.title|truncatewords:10  }}</h3>
-                            <p class="article__content">{{ article.content|truncatewords:10 }}</p>
+                            <p class="article__content">{{ article.content|truncatewords:30 }}</p>
                             <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
                         </div>
                     </a>

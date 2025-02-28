@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{% static 'css/welcome.css' %}" />
 {% endblock %}
 {% block content %}
+<!-- Remove the script from here -->
 <div class="welcome__container">
   <div class="main__container">
     {% if latest_article %}
@@ -28,6 +29,7 @@
             <div class="card">
               <h4 class="card__title">{{ article.title|truncatewords:20  }}</h4>
               <p class="card__text"> {{ article.content|truncatewords:35 }} </p>
+              <p class="card__count">Views: {{ article.view_count }} ;&nbsp; <span class="card__published">Published In:{{ article.published_date }}</span></p>
             </div>         
           </div>
         </a>
@@ -48,9 +50,9 @@
               <p>No image available</p>
             {% endif %}
             <div class="article-details">
-              <h3 class="article__header">{{ article.title|truncatewords:20  }}</h3>
-              <p class="article__content">{{ article.content|truncatewords:50 }}</p>
-              <p class="article__count">Views: {{ article.view_count }} <span class="article__published">{{ article.published_date }}</span></p>
+                <h3 class="article__header">{{ article.title|truncatewords:20  }}</h3>
+                <p class="article__content">{{ article.content|truncatewords:50 }}</p>
+                <p class="article__count">Views&nbsp;:&nbsp;{{ article.view_count }}&nbsp;and&nbsp;<span class="article__published">Published In&nbsp;:&nbsp;{{ article.published_date }}</span></p>
             </div>
           </div>
         </a>    

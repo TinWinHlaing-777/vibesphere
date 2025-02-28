@@ -1,7 +1,17 @@
+{% load static %}
+
 <nav class="nav__container">
   <a href="{% url 'welcome' %}" class="logo">VibeSphere</a>
+  
+  <!-- Add hamburger menu button -->
+  <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
   <ul class="nav__list__container">
-    <li class="nav__list">
+    <li class="nav__list {% if request.path == '/' %}active{% endif %}">
       <a href="{% url 'welcome' %}" class="nav__list__item">Home</a>
     </li>
     <li class="nav__list">
@@ -27,3 +37,7 @@
     {% endif %}
   </ul>
 </nav>
+
+{% block extra_js %}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

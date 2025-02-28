@@ -2,9 +2,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
-    height: 12vh;
-    margin: auto;
+    width: 100%;
+    height: 8vh;
+    margin: 0;
+    padding: 0 5%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
 .logo{
@@ -18,6 +25,9 @@
     list-style: none;
     display: flex;
     gap: 3rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
 }
 
 .nav__list {
@@ -29,4 +39,101 @@
     color: #1E205A;
     font-weight: 400;
     font-size: 1rem;
+}
+
+.nav__list__item:hover {
+    color: #3438a0;
+}
+
+/* Hamburger Menu Styles */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #1E205A;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+}
+
+/* Media query for mobile devices */
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: flex;
+        z-index: 1002;
+    }
+
+    .nav__list__container {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        flex-direction: column;
+        background-color: rgb(255, 255, 255);
+        width: 70%;
+        height: 100%;
+        min-height: 100vh;
+        padding-top: 12vh;
+        transition: 0.3s ease-in-out;
+        box-shadow: -2px 0 4px rgba(0,0,0,0.1);
+        z-index: 1001;
+        overflow-y: auto;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .nav__list__container.active {
+        right: 0;
+    }
+
+    .nav__list {
+        width: auto;
+        text-align: center;
+        width: 100%;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        transition: 0.3s ease;
+    }
+
+    .nav__list:hover{
+        background-color: #e1e1e1;
+    }
+
+    .nav__list.active {
+        background-color: #e1e1e1;
+    }
+
+    .nav__list__item {
+        font-size: 1.1rem;
+        display: inline-block;
+        padding: 0.5rem 0;
+    }
+
+    /* Hamburger animation when active */
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+}
+
+/* Additional media query for smaller devices */
+@media screen and (max-width: 480px) {
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .nav__list__container {
+        width: 85%;
+    }
 }

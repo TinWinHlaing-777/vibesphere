@@ -1,73 +1,180 @@
-{%extends 'main.html'%}
-{% load static %}
-{% block title %}Home{% endblock %}
+{%extends 'main.html'%} {% load static %} {% block title %}Home{% endblock %}
 {%block extra_css %}
 <link rel="stylesheet" href="{% static 'css/detail__article.css' %}" />
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="main__detail__container">
-    <!-- Main Article Content -->
-    <div class="detail__article">
-        <div class="nested__container">
-            <h1 class="detail__article__title">{{ article.title }}</h1>
-            <p class="detail__article__author">Vibe from - {{ article.author }}</p>
-            <p>{{ article.category.name }}</p>
-            {% if article.article_image %}
-                <img src="{{article.article_image.url}}" alt="{{article.title}}" class="detail__article__image">
+  <!-- Main Article Content -->
+  <div class="detail__article">
+    <div class="nested__container">
+      <h1 class="detail__article__title">{{ article.title }}</h1>
+      <p class="detail__article__author">Vibe from - {{ article.author }}</p>
+      <p>{{ article.category.name }}</p>
+      {% if article.article_image %}
+      <img
+        src="{{article.article_image.url}}"
+        alt="{{article.title}}"
+        class="detail__article__image"
+      />
+      {% else %}
+      <p>No image available</p>
+      {% endif %}
+      <p class="article__text__viewer">{{article.view_count}} viewes</p>
+      <p class="article__text">{{ article.content }}</p>
+      <p class="article__text">Published At: {{ article.published_date }}</p>
+    </div>
+    <!-- Like and Share Section -->
+    <div class="like__share__container">
+      <!-- Like Button -->
+      <div class="like__section">
+        <form
+          action="{% url 'like_article' article.title %}"
+          method="post"
+          class="like__form"
+        >
+          {% csrf_token %}
+          <button type="submit" class="like__button">
+            {% if request.user in article.likes.all %}
+            <i class="fas fa-heart" style="color: red"></i>
+            <!-- Filled Heart -->
             {% else %}
-                <p>No image available</p>
+            <i class="far fa-heart" style="color: black"></i>
+            <!-- Outlined Heart -->
             {% endif %}
-            <p class="article__text__viewer">{{article.view_count}} viewers</p>
-            <p class="article__text">{{ article.content }}</p>
-            <p class="article__text">Published At: {{ article.published_date }}</p>
-        </div>
-        <div class="comments__section">
-            <h3 class="comment__header">Feel free to share some of your vibe</h3>
-            {% if user.is_authenticated %}
-                <form class="comment__form__container" method="post">
-                    {% csrf_token %}
-                    <div class="comment__form__group">
-                        <label class="comment__form__label" for="id_title">Comment</label>
-                        {{ form.content}}
-                    </div>
-                    <button type="submit" class="comment__btn">Add Comment</button>
-                </form>
-            {% else %}
-                <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
-            {% endif %}
-            {% for comment in article.comments.all %}
-                <div class="comment__container">
-                    <div class="comment__detail">
-                        <p class="comment__text"><strong>{{ comment.author }}</strong> suggested:</p>
-                        <p class="main__comment">{{ comment.content }}</p>
-                    </div>
-                    <p class="comment__date">{{ comment.created_date }}</p>
-                </div>
-            {% empty %}
-                <p class="span__comment__text">No comments yet. Be the first to comment!</p>
-            {% endfor %}
-        </div>
+          </button>
+        </form>
+        <p class="like__count">{{ article.likes.count }} Likes</p>
+      </div>
+
+      <!-- Share Button -->
+      <div class="share__section">
+        <button class="share__button" onclick="openShareDialog()">
+          <i class="fas fa-share-alt"></i>
+          <!-- Share Icon -->
+        </button>
+        <p class="share__text">Share</p>
+      </div>
     </div>
 
-    <!-- Suggested Articles Sidebar -->
-    <div class="suggested__container">
-        <h3 class="suggested__container__title">Suggested Articles</h3>
-        {% for article in suggested_articles %}
-            <a href="{% url 'read_article' article.title %}" class="suggested__article__card">
-                {% if article.article_image %}
-                    <img src="{{article.article_image.url}}" alt="{{article.title}}" class="suggested__card__image">
-                {% else %}
-                    <p>No image available</p>
-                {% endif %}
-                <div class="suggested__article__details">
-                    <h3 class="suggested__card__title">{{ article.title|truncatewords:5 }}</h3>
-                    <p class="suggested__card__text">{{ article.content|truncatewords:10 }}</p>
-                    <p class="suggested__card__text">{{ article.published_date }}</p>
-                </div>
-            </a>
-        {% endfor %}
+    <!-- Share Dialog -->
+    <div id="shareDialog" class="share__dialog">
+      <div class="share__dialog__content">
+        <span class="close__dialog" onclick="closeShareDialog()">&times;</span>
+        <p>Share this article:</p>
+        <input
+          type="text"
+          id="articleUrl"
+          value="{{ request.build_absolute_uri }}"
+          readonly
+        />
+        <button
+          onclick="copyLink('{{ article.title }}')"
+          class="copy__link__button"
+        >
+          Copy Link
+        </button>
+      </div>
     </div>
+
+    <!-- Share Count Display -->
+    <div class="share__count">
+      <p>
+        <i class="fas fa-share"></i>
+        <span id="shareCount">{{ article.share_count }}</span> Shares
+      </p>
+    </div>
+    <!-- Comment Session -->
+    <div class="comments__section">
+      <h3 class="comment__header">Feel free to share some of your vibe</h3>
+      {% if user.is_authenticated %}
+      <form class="comment__form__container" method="post">
+        {% csrf_token %}
+        <div class="comment__form__group">
+          <label class="comment__form__label" for="id_title">Comment</label>
+          {{ form.content}}
+        </div>
+        <button type="submit" class="comment__btn">Add Comment</button>
+      </form>
+      {% else %}
+      <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+      {% endif %} {% for comment in article.comments.all %}
+      <div class="comment__container">
+        <div class="comment__detail">
+          <p class="comment__text">
+            <strong>{{ comment.author }}</strong> suggested:
+          </p>
+          <p class="main__comment">{{ comment.content }}</p>
+        </div>
+        <p class="comment__date">{{ comment.created_date }}</p>
+      </div>
+      {% empty %}
+      <p class="span__comment__text">
+        No comments yet. Be the first to comment!
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Suggested Articles Sidebar -->
+  <div class="suggested__container">
+    <h3 class="suggested__container__title">Suggested Articles</h3>
+    {% for article in suggested_articles %}
+    <a
+      href="{% url 'read_article' article.title %}"
+      class="suggested__article__card"
+    >
+      {% if article.article_image %}
+      <img
+        src="{{article.article_image.url}}"
+        alt="{{article.title}}"
+        class="suggested__card__image"
+      />
+      {% else %}
+      <p>No image available</p>
+      {% endif %}
+      <div class="suggested__article__details">
+        <h3 class="suggested__card__title">
+          {{ article.title|truncatewords:5 }}
+        </h3>
+        <p class="suggested__card__text">
+          {{ article.content|truncatewords:30 }}
+        </p>
+        <p class="suggested__card__text">{{ article.published_date }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
 </div>
-{% include 'footer.html' %}
-{% endblock %}
+<script>
+  // Open Share Dialog
+  function openShareDialog() {
+    document.getElementById("shareDialog").style.display = "block";
+  }
+
+  // Close Share Dialog
+  function closeShareDialog() {
+    document.getElementById("shareDialog").style.display = "none";
+  }
+
+  // Copy Link to Clipboard and Increment Share Count
+  function copyLink(articleTitle) {
+    const urlInput = document.getElementById("articleUrl");
+    urlInput.select();
+    document.execCommand("copy");
+    alert("Link copied to clipboard!");
+
+    // Send AJAX request to increment share count
+    fetch(`/increment-share-count/${articleTitle}/`, {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the share count displayed on the page
+        document.getElementById("shareCount").textContent = data.share_count;
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+</script>
+{% include 'footer.html' %} {% endblock %}

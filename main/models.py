@@ -120,8 +120,10 @@ class Article(models.Model):
     article_image = models.ImageField(upload_to='article_images/')
     content = models.TextField()
     published_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_articles', blank=True)
     allow_to_comment = models.BooleanField(default=True)
     view_count = models.IntegerField(default=0)
+    share_count = models.IntegerField(default=0)  # New field for share count
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
 
     def __str__(self):
