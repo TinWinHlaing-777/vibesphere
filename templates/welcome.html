@@ -12,7 +12,7 @@
     <div class="left__container"style="background-image: url('{{ latest_article.article_image.url }}');">
       <div class="overlay">
         <div class="text-content">
-          <h3 class="blog__header">{{latest_article.title }}</h3>
+          <h3 class="blog__header">{{latest_article.title|truncatewords:10 }}</h3>
           <p class="blog__preview">
             {{ latest_article.content|truncatewords:50 }} 
             <a href="{% url 'read_article' latest_article.title %}" class="read__more">Read More</a> 
@@ -27,8 +27,8 @@
         <a href="{% url 'read_article' article.title %}" style="text-decoration: none;">
           <div class="card__container">
             <div class="card">
-              <h4 class="card__title">{{ article.title|truncatewords:20  }}</h4>
-              <p class="card__text"> {{ article.content|truncatewords:35 }} </p>
+              <h4 class="card__title">{{ article.title|truncatewords:5  }}</h4>
+              <p class="card__text"> {{ article.content|truncatewords:30 }} </p>
               <p class="card__count">Views: {{ article.view_count }} ;&nbsp; <span class="card__published">Published In:{{ article.published_date }}</span></p>
             </div>         
           </div>
